@@ -1,0 +1,302 @@
+:root{
+    --activeColor: #76cf9f;
+    --hoverColor: #04AA6D;
+    --idleColor: #d1d1d1;
+}
+
+fieldset {
+    margin: 20px;
+    padding: 0 10px 10px;
+    border: 1px solid #666;
+    border-radius: 8px;
+    padding-top: 10px;
+    width: 90%;
+}
+
+legend {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+input[type='number'], input[type='text']{
+    text-align: center;
+    width: 50%; 
+    min-width: 100px;
+}
+
+#selectionWrapper{
+    display: block;
+    width: 100%;
+}
+
+#selectionWrapper > div {
+    display: inline-block;
+}
+
+.selectType {
+    min-width: 10%;
+}
+
+#selectionDIV {
+    margin: 0 auto;
+}
+
+
+.inputHeader {
+    text-align: center;
+}
+
+.inputGridWrapper, .inputGridWrapperHeader {
+	display: none;
+	width: 90%;
+	grid-template-columns: repeat(6, 1fr);
+	padding: 1em;
+}
+
+.inputGridWrapper > div, .inputGridWrapperHeader > div, #wireDuctDisplayWrapper > div{
+	/*border: 1px dashed black; */
+	padding: 0.1em;
+}
+
+.inputGridWideMarginL {
+    grid-column: 1/3;
+}
+
+.inputGridWideMarginR {
+    grid-column: 5/7;
+}
+
+.inputGridMediumCenter {
+    grid-column: 3/5;
+}
+
+.inputGridWideCenter {
+    grid-column: 2/6;
+    margin-block-end: 5%;
+}
+
+.inputGridWrapper > .inputGrid, .inputGridWrapperHeader > .inputGrid {
+	text-align: right;
+}
+
+.inputGridWrapper > .inputUnitsGrid, .inputGridWrapperHeader > .inputUnitsGrid {
+	padding-left: 5%;
+	margin: auto 0;
+}
+
+
+.inputGridWrapper .inputSetting, .inputGridWrapperHeader .inputSetting {
+	text-align: center;
+}
+
+#conductorInput {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0.25 em;
+}
+
+#conductorInput > div {
+    margin: 0 12%;
+    width: 100%;
+}
+
+#conductorInput > input[type='number'], select{
+    text-align: center;
+    width: 75%; 
+    min-width: 100px;
+}
+
+
+#ductCalcButtonsContainer > input[type='submit'], #ductCalcButtonsContainer > input[type='reset'] {
+    width: 45%;
+}
+
+
+.formButton {
+    appearance: none;
+    background-color: #2ea44f;
+    border: 1px solid rgba(27, 31, 35, .15);
+    border-radius: 6px;
+    box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    padding: 6px 16px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+  
+  .formButton:focus:not(:focus-visible):not(.focus-visible) {
+    box-shadow: none;
+    outline: none;
+  }
+  
+  .formButton:hover {
+    background-color: #2c974b;
+  }
+  
+  .formButton:focus {
+    box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+    outline: none;
+  }
+  
+  .formButton:disabled {
+    background-color: #94d3a2;
+    border-color: rgba(27, 31, 35, .1);
+    color: rgba(255, 255, 255, .8);
+    cursor: default;
+  }
+  
+  .formButton:active {
+    background-color: #298e46;
+    box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
+  }
+
+
+#wireDuctDisplayWrapper {
+    display: none;
+    grid-template-columns: 1fr 1fr repeat(9, 1fr);
+    grid-template-rows: 1fr 1fr repeat(10, 1fr);
+    max-height: 500px;
+}
+
+#wireDuctDisplayWrapper > div:not(:first-child){
+    min-height: 20px;
+}
+
+#wireDuctDisplayWrapper .headerDIV {
+    max-height: 200px;
+    text-align: center;
+    margin: auto;
+}
+
+#wireDuctDisplayContainer{
+    grid-column: 3/12;
+    grid-row: 3/12;
+}
+#wireDuctDisplayTable {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+}
+
+
+#wireDuctDisplayTable > div {
+    border: 1px solid black;
+    padding: 0.1 em;
+    text-align: center;
+    margin: -.5px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropDownMenu li {
+    position: relative;
+    float: left;
+}
+
+.dropDownMenu li > ul {
+    position: absolute;
+    left:-999em;
+    width:100%;
+    top:0;
+    transition:top .25s ease;
+}
+
+.dropDownMenu ul ul {
+    transition:transform .25s ease, opacity .25s ease;
+    transform:translateX(0);
+    opacity:0;
+}
+
+.dropDownMenu .dropDownMenuButton {
+    background-color: var(--idleColor);
+    padding: 5px 10px 5px 10px;
+    border: 1px solid #fff;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .dropDownMenu .active {
+    background-color: var(--hoverColor);
+  }
+
+  .dropDownMenu button:hover {
+    background-color: var(--hoverColor);
+  }
+  .dropDownMenu li:hover > ul {
+    left:0;
+    top:100%;
+  }
+  .dropDownMenu li li:hover > ul {
+    left:0;
+    transform:translateX(100%);
+    top:0;
+    opacity:1;
+  }
+  .dropDownMenu ul li {
+    float: none;
+  }
+  .dropDownMenu li:hover > button {
+    background: (--idleColor);
+  }
+  #dropDownMenu ul li {
+    border-top: none;
+  }
+  
+
+  #conductorCountDisplayContainer{
+    grid-column: 3/5;
+  }
+
+  #conductorCountTable {
+    height: 60%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(15, 1fr);
+  }
+
+  #conductorCountTable > div {
+    text-align: center;
+    border: 1px solid black;
+  }
+
+  #conductorCountTable > div:nth-child(-n + 2) {
+    margin-top: 10%;
+    min-height: 2.5em;
+    max-height: 4em;
+    border: 2px solid black;
+    background-color: var(--idleColor);
+  }
+
+  #conductorCountTable > div:nth-child(n + 3) {
+    padding-top: 0.5em;
+    min-height: 1em;
+    max-height: 2em;
+    margin-top: -1px;
+  }
+
+  #conductorCountTable >div:nth-child(odd) {
+    margin-left: -1px
+  }
+
+  #conductorCountTable > div:nth-child(4n-2),   #conductorCountTable > div:nth-child(4n-3) {
+    background-color: var(--idleColor);
+  }

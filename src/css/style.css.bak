@@ -1,0 +1,370 @@
+:root{
+ --activeColor: #76cf9f;
+ --hoverColor: #04AA6D;
+ --idleColor: #d1d1d1;
+}
+
+#palletDisplayWrapper{
+  position:absolute;
+  top: 10px;
+  margin: auto;
+  width: 95%;
+  height: 40%;
+  border-style: groove;
+  overflow: hidden;
+  display: inline-flex
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+}
+
+fieldset {
+  margin: 20px;
+  padding: 0 10px 10px;
+  border: 1px solid #666;
+  border-radius: 8px;
+  padding-top: 10px;
+}
+
+.backgroundPalletCanvas, .palletLayerCanvas {
+  display: block;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.palletPatternDisplayCanvas {
+  position: relative;
+  margin: auto;
+  height: 100%;
+  width: 50%;
+  border-style: dashed;
+}
+
+#palletLayerCanvas1, #backgroundPallet1 {
+  margin-left: 0px;
+  float: left;
+}
+
+#palletLayerCanvas2, #backgroundPallet2 {
+  margin-right: 0px;
+  float: right;
+}
+
+.palletLayerCanvas,.backgroundPalletCanvas{
+	position:absolute; 
+  top: 10px;  left: 10px;
+}
+
+body {
+  background: transparent; /* Make it white if you need */
+  color: #000000;
+  padding: 0 24px;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  overflow: hidden;
+}
+
+#patternResultsDIV {
+  margin: auto;
+}
+
+#tabDisplayWrapper {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 98%;
+  height: 55%;
+  padding-left: 1%;
+  padding-right: 1%;
+}
+
+.tab {
+  overflow: hidden;
+  border: 1px solid #d1d1d1;
+  background-color: #f1f1f1;
+  width: max-content;
+}
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 16px;
+}
+
+.tab button:hover{
+  background-color: var(--hoverColor);
+}
+
+.tab button.active {
+  background-color: var(--activeColor);
+}
+
+.tabContent {
+  display: none;
+  position: relative;
+  padding: 20px 12px;
+  border: 1px solid #d1d1d1;
+  width: 98%;
+  height: 80%;
+}
+
+.tabContent .tabContentContainer {
+  margin-left: 20%;
+}
+
+.tabContent .bottomDisplayWrapper {
+  position: absolute; bottom: 10px;
+  display: inline-block;
+  width: 100%;
+}
+
+.bottomDisplayDIV {
+  display: inline-block;
+  justify-content: center;
+}
+
+.bottomDisplayDIV:not(:first-child){
+  margin-left: 20%;
+}
+
+.indentSpan {
+  margin-left: 5%;
+}
+
+#patternTableContainer {
+  max-height: 60%;
+  max-width: fit-content;
+  overflow: auto;
+}
+
+#patternSelectTableWrapper {
+  width: 60%;
+
+}
+
+
+input[type='number'], input[type='text']{
+  text-align: center;
+}
+
+
+.dropbtn {
+  background-color: var(--activeColor);
+  color: #ffffff;
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  min-width: 200px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin: auto;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  border: 1px;
+  border-radius: 1px;
+  background-color: var(--activeColor);
+  min-width: 250px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content button:nth-child(even){
+  background-color: #d1d1d1;
+}
+
+.dropdown-content button {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  width: 100%;
+  border: none;
+  display: block;
+}
+
+.dropdown-content button:hover {
+  background-color: var(--hoverColor);
+}
+
+.dropdown-content button.active {
+  background-color: var(--hoverColor);
+  color: #ffffff;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: var(--hoverColor);
+}
+
+.dropUpbtn {
+  background-color: var(--activeColor);
+  color: #ffffff;
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  min-width: 200px;
+}
+
+.dropup {
+  position: relative;
+  display: inline-block;
+  margin-top: 150px;
+}
+
+.dropup-content {
+  display: none;
+  position: absolute;
+  border: 1px;
+  border-radius: 1px;
+  background-color: var(--activeColor);
+  min-width: 250px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  bottom: 35px;
+  z-index: 1;
+}
+
+.dropup-content button:nth-child(even){
+  background-color: #d1d1d1;
+}
+
+.dropup-content button {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  width: 100%;
+  border: none;
+  display: block;
+}
+
+.dropup-content button:hover {
+  background-color: var(--hoverColor);
+}
+
+.dropup-content button.active {
+  background-color: var(--hoverColor);
+  color: #ffffff;
+}
+
+.dropup:hover .dropup-content {
+  display: block;
+}
+
+.dropup:hover .dropUpbtn {
+  background-color: var(--hoverColor);
+}
+
+.patternSelectTable {
+  --border: 2px solid black;
+  border-radius: 10px;
+ 
+  /* Don't change these properties */
+  border-spacing: 0;
+  border-collapse: separate;
+  border: var(--border);
+  overflow: hidden;
+  width: 100%;
+ }
+ 
+ /* Apply a border to the right of all but the last column */
+ .patternSelectTable th:not(:last-child),
+ .patternSelectTable td:not(:last-child) {
+  border-right: var(--border);
+ }
+
+
+ /* Apply a border to the bottom of all but the last row */
+ .patternSelectTable>thead>tr:not(:last-child)>th,
+ .patternSelectTable>thead>tr:not(:last-child)>td,
+ .patternSelectTable>tbody>tr:not(:last-child)>th,
+ .patternSelectTable>tbody>tr:not(:last-child)>td,
+ .patternSelectTable>tfoot>tr:not(:last-child)>th,
+ .patternSelectTable>tfoot>tr:not(:last-child)>td,
+ .patternSelectTable>tr:not(:last-child)>td,
+ .patternSelectTable>tr:not(:last-child)>th,
+ .patternSelectTable>thead:not(:last-child),
+ .patternSelectTable>tbody:not(:last-child),
+ .patternSelectTable>tfoot:not(:last-child) {
+   border-bottom: var(--border);
+  }
+
+
+ .patternSelectTable tr:nth-child(even){
+  background-color: #d1d1d1;
+ }
+
+ .patternSelectTable tr:hover {
+  background-color: var(--hoverColor);
+ }
+ 
+ .patternSelectTable tr.active {
+  background-color: var(--hoverColor);
+ }
+ 
+
+ .patternSelectTable td{
+  text-align: center;
+  width: 10%;
+ }
+
+ .patternSelectTable th {
+  background-color: #d1d1d1;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid black;
+ }
+
+ #patternSelectTable{
+  width: 100%;
+  min-height: 10%;
+  max-height: 30%;
+  margin: 0;
+  padding: 0;
+}
+
+.patternSelectBtn {
+  display: block;
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  padding: 5px 0px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+}
+
+
+
+.btnDIV {
+  display: inline-block;
+  width: 24%;
+  padding: auto;
+}
+
+ .btnDIV:not(:last-child){
+  border-right: 2px solid black;
+  border-spacing: 0;
+}

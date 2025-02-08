@@ -1,0 +1,810 @@
+const MARGIN = 10;                  // (px) Amount of standard margin
+const PERCENTADJUST = 0.75;         // (%) Percent of width/length to draw line indicating direction of carton
+const UNITLOAD_DRAW_SPACING = 100;  // (mm) Use this value to increase canvas to show the entire unit load + any hang offs.
+
+//const drawResource = require('/drawingResource.js');
+// Global variables to store size of pallet display values.
+var palletDisplayHeight = 0;
+var palletDisplayWidth = 0;
+const PALLET_DISPLAY_HEIGHT_PERCENT = 0.4;
+const PALLET_DISPLAY_WIDTH_OFFSET_PX = 10;	
+
+// Global Data
+// Values in pixels
+var mm2PixelRatio = 0.0;
+var palletWidth = 0;
+var palletHeight = 0;
+var cartonWidth = 0.0;
+var cartonLength = 0.0;
+// Values in Inches
+var palletWidth_Inch = 48;
+var palletLength_Inch = 40;
+var palletHeight_Inch = 6;
+var palletWidth_mm = 0;
+var palletLength_mm = 0;
+var palletUnitLoad_Width_Inch = 49;
+var palletUnitLoad_Length_Inch = 41;
+var palletUnitLoad_Height_Inch = 52;
+
+var cartonWidth_Inch = 9;
+var cartonLength_Inch = 6;
+var cartonHeight_Inch = 6.75;
+var cartonWeight_lb = 12;			
+// Values in mm
+var palletWidth_mm = 0;
+var palletHeight_mm = 0;
+
+var palletUnitLoad_Width_mm = 0;
+var palletUnitLoad_Length_mm =  0;
+var palletUnitLoad_Height_mm =  0;
+
+var cartonWidth_mm = 0;
+var cartonLength_mm = 0;
+var cartonHeight_mm = (cartonHeight_Inch * 25.4).toFixed(3) * 1;
+var placedCartonLayer1 = [];
+var placedCartonLayer2 = [];
+var countPerLayer = 0;
+var solutionSelect_Posn = []; // Stores top left position and bottom right position for each solution
+var solutionSelected = 99;
+var solutionDisplayed = 0;
+var totalSolutions = 0;
+
+var columnSolutions = [];     // Stores all column solutions
+var interlockSolutions = [];  // Stores all interlock solutions
+var trilockSolutions = [];    // Stores all trilock solutions
+var solutionsArray = [];      // Stores *all* solutions
+var selectableSolutionsArray = []; // Stores solutions that can be selected by user
+var columnIndices = [{ firstIndex: 0, lastIndex: 0 }]; // Stores start/end position for Column Patterns
+var interlockIndices = [{ firstIndex: 0, lastIndex: 0 }]; // Stores start/end position for Interlock Patterns
+var trilockIndices = [{ firstIndex: 0, lastIndex: 0 }]; // Stores start/end position for Trilock Patterns
+
+var placeRecipeSelect = 0;
+var count = 0;
+var inputPackOption = 0;
+var inputAlignmentVector = 0;
+var inputLayerFlip = 2;			// 0 = No Flip, 1 = Along X, 2 = Along Y, 3 = Along X & Y
+var patternType_Updated = false;
+var patternType_Input = 0;
+
+
+let X_WEIGHT = 1;
+let Y_WEIGHT = 1;
+
+let Y_OFFSET = 180; // Offset from top in px
+
+var backgroundLayer1CanvasCtx = document.getElementById('backgroundPallet1');
+var backgroundLayer1Canvas = backgroundLayer1CanvasCtx.getContext('2d');
+var palletLayer1CanvasCtx = document.getElementById('palletLayerCanvas1');
+var palletLayer1Canvas = palletLayer1CanvasCtx.getContext('2d');
+var backgroundLayer2CanvasCtx = document.getElementById('backgroundPallet2');
+var backgroundLayer2Canvas = backgroundLayer2CanvasCtx.getContext('2d');
+var palletLayer2CanvasCtx = document.getElementById('palletLayerCanvas2');
+var palletLayer2Canvas = palletLayer2CanvasCtx.getContext('2d');
+var palletLayerCanvasClassCtx = document.getElementsByClassName('palletLayerCanvas');
+var backgroundPalletCanvasClassCtx = document.getElementsByClassName('backgroundPalletCanvas');
+
+  // Define global variables to keep track of how wide and tall the pallet is supposed to be (in px)
+var palletDisplayWidth_px = 0;
+var palletDisplayHeight_px = 0;
+  
+
+// Imediatelly initializes canvases
+console.log('Starting Junk!');
+reset();
+
+
+//palletLayer1Canvas.fillStyle = '#000000';
+//palletLayer1Canvas.fillRect(10,10,500,500);
+
+
+
+  // Take in dimensions of pallet and carton, then determine mm to Px ratio for scaling
+  /* NOTE: JavaScript/displays utilize Width as left and right dimension (right = +X), and Height as up and down Dimension (down = +Y)
+            As such, it gets goofy. In real meat space, height is +Z (up and down). So there will be some mixing of 'height' and 'length'
+            since the dimensions of the cartons and pallets are given in width (+x), length (+y), and height (+z).
+            It's possible to convert this to things such as 'palletSizeX_px' or something similar. But we'll stick with
+            this overly confusing terminology because that's where we are.
+  */
+function scaleCanvas(){
+
+  console.log('Scale Canvas...');
+  console.log('Pallet Dims ... Width: ', palletWidth_Inch, ', Length: ', palletLength_Inch);
+  console.log('Carton Dims ... Width: ', cartonWidth_Inch, ', Length: ', cartonLength_Inch);
+
+  // Convert inch to mm
+  palletWidth_mm = (palletWidth_Inch * 25.4).toFixed(4) * 1;
+  palletLength_mm = (palletLength_Inch * 25.4).toFixed(4) * 1;
+  palletHeight_mm = (palletHeight_Inch * 25.4).toFixed(4) * 1;
+  palletUnitLoad_Width_mm = (palletUnitLoad_Width_Inch * 25.4).toFixed(4) * 1;
+  palletUnitLoad_Length_mm = (palletUnitLoad_Length_Inch * 25.4).toFixed(4) * 1;
+  palletUnitLoad_Height_mm = (palletUnitLoad_Height_Inch * 25.4).toFixed(4) * 1;
+  cartonWidth_mm = (cartonWidth_Inch * 25.4).toFixed(4) * 1;
+  cartonLength_mm = (cartonLength_Inch * 25.4).toFixed(4) * 1;
+  console.log('Pallet Dims (mm) ... Width: ', palletWidth_mm, ', Length: ', palletLength_mm);
+  console.log('Carton Dims (mm) ... Width: ', cartonWidth_mm, ', Length: ', cartonLength_mm);
+
+    // Determine the actual size (in px) that we can display the pallets width wise and height (length) wise
+  let totalPalletDisplayWidth_px = (document.getElementsByClassName('palletPatternDisplayCanvas')[0].clientWidth - (2 * MARGIN)); // Find total width
+  let totalPalletDisplayHeight_px =(document.getElementsByClassName('palletPatternDisplayCanvas')[0].clientHeight- (2 * MARGIN)); // Find total height
+
+  // Calculate distance to pixel ratio
+  let xMm2PixelRatio = totalPalletDisplayWidth_px / ((palletWidth_mm > palletUnitLoad_Width_mm) ? palletWidth_mm : palletUnitLoad_Width_mm);
+  let yMm2PixelRatio = totalPalletDisplayHeight_px / ((palletLength_mm > palletUnitLoad_Length_mm) ? palletLength_mm : palletUnitLoad_Length_mm) ;
+  // Find smallest ratio
+  mm2PixelRatio = Math.min(xMm2PixelRatio, yMm2PixelRatio);
+
+  console.log('mm2PixelRatio: ', mm2PixelRatio);
+  
+    // Resize carton to correct ratio based on input
+  cartonWidth = cartonWidth_mm * mm2PixelRatio;
+  cartonLength = cartonLength_mm * mm2PixelRatio;
+  let cartonLongestDim = cartonWidth <= cartonLength ? cartonLength : cartonWidth;
+
+  console.log('Carton Sizes ... Width: ', cartonWidth, 'px, Length: ', cartonLength, 'px ... Longest Dim: ', cartonLongestDim);
+
+    // Determine display dimensions of the two layers taking into account margin
+  palletDisplayWidth_px = (mm2PixelRatio * palletWidth_mm);
+  palletDisplayHeight_px = (mm2PixelRatio * palletLength_mm);
+    // Determine total unit load display dimensions
+  unitloadDisplayWidth_px = (mm2PixelRatio * (palletUnitLoad_Width_mm + cartonLongestDim));
+  unitloadDisplayHeight_px = (mm2PixelRatio * (palletUnitLoad_Length_mm + cartonLongestDim));
+
+    // Determine spacing required to center (via margins)
+  let palletDisplayWidthOffset_px = ((totalPalletDisplayWidth_px - palletDisplayWidth_px) / 2);
+  let palletDisplayHeightOffset_px = ((totalPalletDisplayHeight_px - palletDisplayHeight_px) / 2);
+  
+  console.log('Total Pallet Display Values... Width: ', totalPalletDisplayWidth_px, ' px, Height: ', totalPalletDisplayHeight_px, ' px');
+  console.log('Pallet Display Values ... Width: ', palletDisplayWidth_px, ' px, Height: ', palletDisplayHeight_px, ' px');  // Display values in pxs
+
+
+
+
+    // For each element of the Pallet Layer and Background pallet, set the CSS width and Height to canvas size.
+    // Also add padding to center properly
+  for(let i = 0; i < palletLayerCanvasClassCtx.length; i++){
+      // Set canvas width to scale image properly. Set intrinsic and extrinsic dimensions to be the same.
+      // Canvases are weird, ya'll...
+    palletLayerCanvasClassCtx[i].style.width = palletLayerCanvasClassCtx[i].width = unitloadDisplayWidth_px;
+    palletLayerCanvasClassCtx[i].style.height = palletLayerCanvasClassCtx[i].height = unitloadDisplayHeight_px;
+    backgroundPalletCanvasClassCtx[i].style.width = backgroundPalletCanvasClassCtx[i].width = unitloadDisplayWidth_px;
+    backgroundPalletCanvasClassCtx[i].style.height = backgroundPalletCanvasClassCtx[i].height = unitloadDisplayHeight_px;
+
+      // Modify margins to center WRT Display Canvas DIV
+    palletLayerCanvasClassCtx[i].style.marginLeft = palletLayerCanvasClassCtx[i].style.marginRight = palletDisplayWidthOffset_px;
+    palletLayerCanvasClassCtx[i].style.marginTop = palletLayerCanvasClassCtx[i].style.marginBottom = palletDisplayHeightOffset_px;
+    backgroundPalletCanvasClassCtx[i].style.marginLeft =  backgroundPalletCanvasClassCtx[i].style.marginRight = palletDisplayWidthOffset_px;
+    backgroundPalletCanvasClassCtx[i].style.marginTop = backgroundPalletCanvasClassCtx[i].style.marginBottom  = palletDisplayHeightOffset_px;
+    // NOTE:: Add and subtracting to BG for border purposes
+  }      
+}
+
+function reset() {
+  console.log('Initializing Reset Function...');
+  //resizePalletCanvas();
+  //clearCanvas(palletLayer1Canvas);
+
+  placedCartonLayer1 = [];
+  var placedCarton = [];
+  solutionsArray = [];
+
+  console.log('JavaScript Version ECMAScript 2017');
+
+    // Scale canvas to appropriate size.
+  scaleCanvas();
+  // Read input values to local memory
+  // NOTE: Checks to see if latest value is > 0, if so, it assigns the tag to the value. If not, it just defaults to 48
+  //	NOTE2 (Electric Boogaloo): The > 0 isn't strictly necessary but helps readability. cuz I'm not a smart man, Jennay
+  
+
+    // Draw Pallet Border
+  backgroundLayer1Canvas.fillStyle = backgroundLayer2Canvas.fillStyle= '#966F33';
+  backgroundLayer1Canvas.strokeStyle = backgroundLayer2Canvas.strokeStyle = '#808080';
+  
+  console.log('(reset) Pallet Display Values Pre BG Fill: W:', palletDisplayWidth_px,',H:',palletDisplayHeight_px);
+  backgroundLayer1Canvas.fillRect(0, 0, palletDisplayWidth_px, palletDisplayHeight_px); 
+  backgroundLayer2Canvas.fillRect(0, 0, palletDisplayWidth_px, palletDisplayHeight_px); 
+
+
+  var columnSolution = [];
+  // Save the first index before pushing solutions to the array
+  columnIndices.firstIndex = solutionsArray.length;
+
+  console.log('(reset) Pre Column Pattern Gen Check....');
+  console.log('Carton Dims, W: ', cartonWidth_mm, ', L: ', cartonLength_mm, ', H: ', cartonHeight_mm);
+  console.log('Pallet Size, W: ',  palletWidth_mm, ', L: ', palletLength_mm, ', H: ', palletHeight_mm);
+  console.log('Unit Load Size, W: ',  palletUnitLoad_Width_mm, ', L: ', palletUnitLoad_Length_mm, ', H: ', palletUnitLoad_Height_mm);
+  for (let i = 0; i < 2; i++) {
+    let tempColumnSolution = createColumnPattern(cartonWidth_mm, cartonLength_mm, cartonHeight_mm, palletUnitLoad_Width_mm, palletUnitLoad_Length_mm, palletUnitLoad_Height_mm, i * 90, inputPackOption, inputAlignmentVector).pop();
+    columnSolutions.push(tempColumnSolution);
+    solutionsArray.push(tempColumnSolution);
+  }
+
+	// Compress array
+  selectableSolutionsArray = solutionsArray.slice();
+
+  // Save the last active index for Column Stack generation
+  columnIndices.lastIndex = solutionsArray.length - 1;
+
+  // Sort the solutions based on pack efficiency -- Highest first
+  solutionsArray.sort(function (a, b) {
+    return a.packEfficiency < b.packEfficiency ? 1 : a.packEfficiency > b.packEfficiency ? -1 : 0;
+  });
+
+  // Initialize selected solution
+  solutionSelected = 0;
+  // Determine beginning and end points of Column pattern
+  
+  // Now generate all interlock solutions
+ interlockSolutions = createInterlockPattern(cartonWidth_mm, cartonLength_mm, cartonHeight_mm, palletWidth_mm, palletLength_mm, palletUnitLoad_Height_mm);
+
+    // Sort interlock solutions based on pack efficiency
+  interlockSolutions.sort(function (a, b) {
+    return (a.packEfficiency < b.packEfficiency) ? 1 : (a.packEfficiency > b.packEfficiency) ? -1 : 0;
+  });
+
+    // Only save the top 10 solutions:
+  //interlockSolutions = interlockSolutions.slice(0, 10);
+    // Store beginning index for interlock patterns
+  interlockIndices.firstIndex = solutionsArray.length;
+    // Add top 10 interlock solutions to the Solutions Array
+  solutionsArray = solutionsArray.concat(interlockSolutions);
+  console.log('(reset) Interlock Solutions: ', interlockSolutions);
+  console.log('Total Solutions ...' , solutionsArray.length);
+    // Store the last index for interlock patterns
+  interlockIndices.lastIndex = solutionsArray.length - 1;
+  totalSolutions = interlockIndices.lastIndex;
+  
+  console.log('Column Indices ... First: ', columnIndices.firstIndex, ', Last: ', columnIndices.lastIndex);
+  console.log('Interlock Indices... First: ', interlockIndices.firstIndex, ', Last: ', interlockIndices.lastIndex);
+
+  console.log('The Final Solutions Array...');
+  console.log(solutionsArray);
+
+  // Draw pattern on Layer 1 Canvas
+ drawPattern(palletLayer1Canvas, solutionsArray[solutionDisplayed].solutionPositions);
+ console.log('Solution... ', solutionsArray[solutionDisplayed]);
+ 
+ // Draw potentially flipped pattern on Layer 2 Canvas
+ 
+ drawPattern(palletLayer2Canvas, layerFlip(solutionsArray[solutionDisplayed].solutionPositions));
+}
+//---- End of 'reset' function----//
+
+//----------------- Clear Specific Canvas Object -----------------//
+function clearCanvas(canvas) {
+  //canvas.clearRect(canvas.x - MARGIN, canvas.y - MARGIN, canvas.width + (2 * MARGIN), canvas.height + (2 * MARGIN));
+  canvas.clearRect(0, 0, 2000, 2000);
+  console.log('Clearing Rect... ', canvas);
+}
+
+//----------------- Draw all the Positions in Text For a Given Pattern -----------------//
+function drawPatternPosns(cartonPositions){
+	console.log('Draw Pattern Posns...');
+	palletLayer1Canvas.font = '15px serif';
+	palletLayer1Canvas.fillStyle = '#000000';
+	var tempString = '';
+	var tempYVal = 10;
+	for(let i = 0; i < cartonPositions.length; i++){
+	  tempString = 'Carton #' + i + ' ... x: ' + cartonPositions[i].x + ', y: ' + cartonPositions[i].y;
+	  palletLayer1Canvas.fillText(tempString, 600, tempYVal);
+	  tempYVal += 15;
+	}
+	
+	tempString = "Pack Efficiency: " + solutionsArray[solutionDisplayed].packEfficiency;
+	palletLayer1Canvas.fillText(tempString, 600, tempYVal + 15);
+}
+
+//----------------- Draw an entire pattern -----------------//
+function drawPattern(palletCanvas, cartonPositions) {
+  clearCanvas(palletCanvas);
+  console.log('Draw Pattern ...');
+  console.log('(drawPattern) Starting Pattern Draw... mm2PixelRatio: ', mm2PixelRatio);
+  console.log('(drawPattern) cartonPosition Length: ', cartonPositions.length);
+  for (let i = 0; i < cartonPositions.length; i++) {
+    drawCarton(palletCanvas, cartonPositions[i], i);
+  }
+   
+ // drawPatternPosns(cartonPositions);
+}
+
+
+//----------------- Draw Carton w/ Number  -----------------//
+function drawCarton(canvas, carton, count) {
+  //var self = this;
+  canvas.strokeStyle = '#000000';
+  canvas.fillStyle = '#EDDA74';
+  canvas.beginPath();
+  canvas.setLineDash([]);
+  var tempX = (carton.x * mm2PixelRatio);
+  var tempY = (carton.y * mm2PixelRatio);
+  //console.log('For #', count,': Carton Dims... X: ', carton.x, '| Y: ', carton.y, ' | R: ', carton.r, ' | ... tempX: ', tempX, ' | tempY: ', tempY);
+
+  // IFF Coord Posns are 0,0, it's likely a nothing-burger. Don't display.
+  if (carton.x != 0 && carton.y != 0) {
+    //console.log('Drawing #', count, ', Where... X: ', tempX, ' | Y: ', tempY, ' | R: ', carton.r);
+    if (-15 < carton.r && carton.r < 15) {
+      canvas.rect(tempX - (cartonWidth / 2),  tempY - (cartonLength / 2), cartonWidth,  cartonLength);
+      canvas.moveTo(tempX - (cartonWidth / 2) * PERCENTADJUST,  tempY - (cartonLength / 2) * PERCENTADJUST);
+      canvas.lineTo(tempX + (cartonWidth / 2) * PERCENTADJUST,  tempY - (cartonLength / 2) * PERCENTADJUST);
+
+      // Rotated 90°
+    } else if (75 < carton.r && carton.r < 105) {
+      canvas.rect(tempX - (cartonLength / 2), tempY - (cartonWidth / 2),  cartonLength, cartonWidth);
+      canvas.moveTo(tempX - (cartonLength / 2) * PERCENTADJUST, tempY - (cartonWidth / 2) * PERCENTADJUST);
+      canvas.lineTo(tempX - (cartonLength / 2) * PERCENTADJUST, tempY + (cartonWidth / 2) * PERCENTADJUST);
+
+      // Rotated 180°
+    } else if (165 < carton.r && carton.r < 195) {
+      canvas.rect(tempX - (cartonWidth / 2),  tempY - (cartonLength / 2), cartonWidth,  cartonLength);
+      canvas.moveTo(tempX - (cartonWidth / 2) * PERCENTADJUST,  tempY + (cartonLength / 2) * PERCENTADJUST);
+      canvas.lineTo(tempX + (cartonWidth / 2) * PERCENTADJUST,  tempY + (cartonLength / 2) * PERCENTADJUST);
+
+      // Rotated 270° OR -90°
+    } else if ( (255 < carton.r && carton.r < 285) || (-105 < carton.r && carton.r < -75) ) {
+      canvas.rect(tempX - (cartonLength / 2), tempY - (cartonWidth / 2),  cartonLength, cartonWidth);
+      canvas.moveTo(tempX + (cartonLength / 2) * PERCENTADJUST, tempY - (cartonWidth / 2) * PERCENTADJUST);
+      canvas.lineTo(tempX + (cartonLength / 2) * PERCENTADJUST, tempY + (cartonWidth / 2) * PERCENTADJUST);
+    }
+
+    canvas.fill();
+    canvas.stroke();
+
+    canvas.font = '22px serif';
+    canvas.fillStyle = '#000000';
+    canvas.fillText(count + 1, tempX * 1 - 10, tempY * 1 + 10);
+  }
+}
+
+//----------------- Push New Carton onto Stack -----------------//
+function pushCartonPosition(placedCarton, x, y, r) {
+  placedCarton.push({
+    x: x,
+    y: y,
+    r: r,
+  });
+}
+
+//----------------- Take Pattern and Space Evenly Along X or Y Based on Input -----------------//
+function packPatternModification(block1, block2, block3, configuration, cartonPosition){
+	let block1CartonX = block1.r ? cartonWidth : cartonLength;
+	let block1CartonY = block1.r ? cartonLength : cartonWidth;
+	
+	let block2CartonX = block2.r ? cartonWidth : cartonLength;
+	let block2CartonY = block2.r ? cartonLength : cartonWidth;
+	
+	let block3CartonX = block3.r ? cartonWidth : cartonLength;
+	let block3CartonY = block3.r ? cartonLength : cartonWidth;
+	
+	var block1TotalWidth = 0;
+	var block1TotalLength = 0;
+	var block2TotalWidth = 0;
+	var block2TotalLength = 0;
+	var unusedLength = 0;
+	var unusedWidth = 0;
+	var adjustmentLength = 0;
+	var adjustmentWidth = 0;
+
+	
+	// Configuration will be used to determine if pattern is being generated from Width (X) down, or Length (Y) right.
+	
+	if (block3 != 0){
+    console.log('(packPatternModification) Initializing as Trilock');
+		// Trilock pattern is being used
+		// TBD
+		
+	} else if (block2 != 0) {
+    console.log('(packPatternModification) Initializing as Interlock');
+			// Interlock pattern being used
+		if (configuration == 0) {
+				// Generating pallet from Width (X) down
+			unusedLength = unitLength - (block1.countY * block1CartonY);					// Determine length of Block 1
+			unusedLength -= (Math.floor(unusedLength / block2CartonY) * block2CartonY);		// Determine length of Block 2, and find unused length
+				
+				// Determine how much to adjust each row by finding total number of cartons in that direction - 1,
+			adjustmentLength = unusedLength / (block1.countY + block2countY - 1);
+		
+		} else if (configuration == 1) {
+			// Generating pallet from Length (Y) right
+		
+		}
+	
+	} else {
+    console.log('(packPatternModification) Initializing as Column');
+		// Column Pattern being used
+	}
+}
+
+//----------------- Create Column Pattern Stacks -----------------//
+function createColumnPattern(cartonWidth, cartonLength, cartonHeight,unitWidth, unitLength, unitHeight, rotation, packOption, alignmentVector) {
+  // Note: packOption 0 = Center on Unit, 1 = space out along X, 2 = space out along Y,
+  // Note2: alignmentVector: 0 = Center, 1 = Top Left (Origin: 0,0), 2 = Top (0,-), 3 = Top Right(+, 0), 4 = Left (0, ...),
+  // 	5 = Right(...,+), 6 = Bottom Left(0, +), 7 = Bottom (..., +), 8 = Bottom Right (+, +)
+  var solution = [];
+  var cartonPositions = [];
+  var tempXVal = 0;
+  var alignmentXVal = 0;
+  var tempYVal = 0;
+  var alignmentYVal = 0;
+  var cartonSpacingX = 0;
+  var cartonSpacingY = 0;
+  // Set X dimension and Y dimension based on input rotation
+  var cartonDimX = (rotation == 0 || rotation == 180) ? cartonWidth : cartonLength;
+  var cartonDimY = (rotation == 0 || rotation == 180) ? cartonLength : cartonWidth;
+
+  // Determine total count in this direction that can fit on this pallet
+  let totalCountX = Math.floor(unitWidth / cartonDimX);
+  let totalCountY = Math.floor(unitLength / cartonDimY);
+  let countPerLayer = totalCountX * totalCountY;
+  let totalUnitCount = Math.floor(unitHeight / cartonHeight) * countPerLayer;
+  //console.log('Column Pattern Gen...');
+  //console.log('Carton Dims... X: ', cartonDimX, ' | Y: ', cartonDimY, ' | Rot: ', rotation);
+  //console.log('Total X Count: ', totalCountX, ' | Total Y Count: ', totalCountY, ' | Count Per Layer: ', countPerLayer, ' | Total Unit Count: ', totalUnitCount);
+
+
+  // Now we have total number of containers that can fit on this pallet in this orientation
+  // Determine pack efficiency by determining the percentage of area the cartons take up vs pallet area
+  // Now limit results to 2 decimal places  -- multiply by 1 to convert the string to number
+  let packEfficiency =( (100 * (cartonDimX * cartonDimY * totalCountX * totalCountY)) / (unitWidth * unitLength) ).toFixed(2) * 1;
+
+  // Switch case to handle X alignment value
+  if (packOption !== 1) {
+    switch (alignmentVector) {
+      case 1:
+      case 4:
+      case 6:
+        alignmentXVal = 0;
+        break;
+      case 0:
+      case 2:
+      case 7:
+        alignmentXVal = (unitWidth - (totalCountX * cartonDimX)) / 2;
+        break;
+      case 3:
+      case 5:
+      case 8:
+        alignmentXVal = unitWidth - (totalCountX * cartonDimX);
+        break;
+      default:
+        break;
+    }
+    // Else space evenly along X. Handle after pattern generation
+  } else {
+    alignmentXVal = 0;
+  }
+  // Switch case to handle Y alignment value
+  if (packOption !== 2) {
+    switch (alignmentVector) {
+      case 1:
+      case 2:
+      case 3:
+        alignmentYVal = 0;
+        break;
+      case 0:
+      case 4:
+      case 5:
+        alignmentYVal = (unitLength - (totalCountY * cartonDimY)) / 2;
+        break;
+      case 6:
+      case 7:
+      case 8:
+        alignmentYVal = unitLength - (totalCountY * cartonDimY);
+        break;
+      default:
+        break;
+    }
+    // Else space Evenly along Y axis. Handle after pattern generation
+  } else {
+    alignmentYVal = 0;
+  }
+
+  // Produce actual locations. Allow i by the x count, and j be the y count
+  for (let i = 0; i < totalCountX; i++) {
+    for (let j = 0; j < totalCountY; j++) {
+      // Calculating X position by means of: Column Count (Starting at Index 0) * Column Width (Carton Width) + 1/2 Column Width
+      //	Y positions by means of: Row Count (Starting at Index 0) * Row Height (Carton Length) + 1/2 Row Height
+      pushCartonPosition(
+        cartonPositions,    // Determine which Array gets written to
+        (i * cartonDimX + cartonDimX / 2 + alignmentXVal).toFixed(3) * 1, // X value
+        (j * cartonDimY + cartonDimY / 2 + alignmentYVal).toFixed(3) * 1, // Y Value
+        rotation,                                                         // Set Rotation
+        i * totalCountY + j                                               // Set Count in Pattern
+      );
+    }
+  }
+
+  // Pattern is now generated. Modify based on pack option
+var cartonSpacingX = 0;
+var cartonSpacingY = 0;
+  if (packOption > 0) {
+    // Pack option to evenly space along X coord
+    if (packOption == 1) {
+      cartonSpacingX = ((unitWidth - totalCountX * cartonDimX) / (totalCountX - 1)) > 0 ? ((unitWidth - totalCountX * cartonDimX) / (totalCountX - 1)) : 0;
+      cartonSpacingY = 0;
+      // Pack option to evenly space along Y coord
+    } else if (packOption === 2) {
+      cartonSpacingX = 0;
+      cartonSpacingY = ((unitLength - totalCountY * cartonDimY) / (totalCountY - 1)) > 0 ? ((unitLength - totalCountY * cartonDimY) / (totalCountY - 1)) : 0;
+    }
+
+    // Now crawl through all carton positions and modify X & Y coords
+    for (let i = 0; i < cartonPositions.length; i++) {
+      // NOTE: If we aren't moving along that axis, cartonSpacing = 0, so += 0 = Original Value
+      // Since we're generating them based on the inner loop being totalCountY, this will allow us
+      // 		to modify the correct values based on the 'totalCountY' value
+      cartonPositions[i].x += Math.floor(i / totalCountY) * cartonSpacingX; // Return whole number which will correspond to Column
+      cartonPositions[i].y += (i % totalCountY) * cartonSpacingY; // Return remainder, which will correspond to Row
+    }
+  }
+
+  // With the actual placement positions for all cartons, sort them based on defined direction
+  // Direction dictated by negative/positive values of X_WEIGHT and Y_WEIGHT s.t. builds from one corner to diagonal corner
+  // NOTE: +x +y -> from 0,0 to +,+ | -x +y -> from +,0 to 0,+ | +x -y -> from 0,+ to +, 0 | -x -y -> from +,+ to 0,0
+  cartonPositions.sort(function (a, b) {
+    return X_WEIGHT * a.x + Y_WEIGHT * a.y > X_WEIGHT * b.x + Y_WEIGHT * b.y
+      ? 1
+      : X_WEIGHT * a.x + Y_WEIGHT * a.y < X_WEIGHT * b.x + Y_WEIGHT * b.y
+      ? -1
+      : 0;
+  });
+
+  // Create an element of the solution with pack efficiency and actual positions
+  solution.push({
+    solutionType: 'Column',
+    packEfficiency: packEfficiency,
+    countPerLayer: countPerLayer,
+    totalUnitCount: totalUnitCount,
+    solutionPositions: cartonPositions,
+  });
+
+  // Return the single solution
+  return solution;
+}
+
+//----------------- Create Interlock Pattern Stacks -----------------//
+function createInterlockPattern(cartonWidth, cartonLength, cartonHeight, unitWidth, unitLength, unitHeight) {
+  var interlockSolutions = [];
+  var block1Rotation = 0;
+  var block2Rotation = 0;
+  var block1PackOption = 0;
+  var block1AlignmentVector = 0;
+  var block2PackOption = 0;
+  var block2AlignmentVector = 0;
+
+  var block1Width = 0;
+  var block1Length = 0;
+  var block2Width = 0;
+  var block2Length = 0;
+
+  var tempMaxCount = 0;
+
+  let maxLayerCount = Math.floor(unitHeight / cartonHeight);
+
+  // Loop through all four variations of interlock setups
+  for (let setup = 0; setup < 4; setup++) {
+    // Based on setup, determine inputs for Column Generator
+    switch (setup) {
+      case 0: // Length of Carton along Width of Pallet. Block 1 expanding in +Y
+        block1Rotation = 90;
+        block1AlignmentVector = 7;
+        block1PackOption = inputPackOption != 2 ? inputPackOption : 0;	// if input Pack Option Valid, use input, else center.
+        block2Rotation = 0;
+        block2AlignmentVector = 2;
+        break;
+      case 1: // Width of Carton along Width of Pallet. Block 1 expanding in +Y
+        block1Rotation = 0;
+        block1AlignmentVector = 7;
+        block1PackOption = inputPackOption != 2 ? inputPackOption : 0;	// if input Pack Option Valid, use input, else center.
+        block2Rotation = 90;
+        block2AlignmentVector = 2;
+        break;
+      case 2: // Length of Carton along Width of Pallet. Block 1 expanding in +X
+        block1Rotation = 90;
+        block1AlignmentVector = 5;
+        block1PackOption = inputPackOption != 1 ? inputPackOption : 0;	// if input Pack Option Valid, use input, else center.
+        block2Rotation = 0;
+        block2AlignmentVector = 4;
+        break;
+      case 3: // Width of Carton along Width of Pallet. Block 1 expanding in +X
+        block1Rotation = 0;
+        block1AlignmentVector = 5;
+        block1PackOption = inputPackOption != 1 ? inputPackOption : 0;	// if input Pack Option Valid, use input, else center.
+        block2Rotation = 90;
+        block2AlignmentVector = 4;
+        break;
+      default: // Something went horribly wrong
+        break;
+    }
+
+    // Check to see if Block 1 is Expanding in +Y
+    if (setup < 2 && 0) {
+		console.log('Expanding Y-ward!');
+      // Cycle through all possible iterations in current setup:
+      for (let i = 0; i <= Math.floor(Math.max(unitWidth, unitLength) / Math.min(cartonWidth, cartonLength)); i++) {
+        block1Length = block1Rotation ? (i + 1) * cartonWidth : (i + 1) * cartonLength;
+        block1Width = unitWidth;
+        block2Length = unitLength - block1Length > 0 ? unitLength - block1Length : 0;
+        block2Width = unitWidth;
+
+        // If Block 2 Length would be < 0. Just end this setup's cycle. Else i = i
+        i = unitLength - block1Length ? i : 999;
+
+        // Ensure Block1 Length isn't so long such that there is no block 2
+        if (block1Length < unitLength - Math.min(cartonWidth, cartonLength)) {
+          // Find the solution for Block 1 and Block 2
+          let block1Solution = createColumnPattern(cartonWidth, cartonLength, cartonHeight, block1Width, block1Length, unitHeight, block1Rotation, block1PackOption, block1AlignmentVector).pop();
+          var block2Solution = createColumnPattern(cartonWidth, cartonLength, cartonHeight, block2Width,block2Length, unitHeight, block2Rotation, block2PackOption, block2AlignmentVector).pop();
+
+          // Adjust all Y positions of Block 2 down such that Block 1 and Block 2 nest
+          for (let j = 0; j < block2Solution.solutionPositions.length; j++) {
+            block2Solution.solutionPositions[j].y = (block2Solution.solutionPositions[j].y + block1Length).toFixed(3) * 1;
+          }
+
+          // Combine both solutions into one
+          // Note: Combines block1Solution.solutionPositions && block2Solution.solutionPositions into one at tempSolution.solutionPositions
+          var tempSolution = {
+            solutionPositions: block1Solution.solutionPositions.concat(block2Solution.solutionPositions),
+          };
+
+          // Set Y dimension based on input rotation
+          var carton2DimY = block2Rotation ? cartonWidth : cartonLength;
+		  
+			// Determine total length used for block 2
+          let carton2UsedLength = (Math.floor(block2Length / carton2DimY) * carton2DimY).toFixed(4) * 1;
+
+          // Determine how much we must shift the block in the X direction (since it's already centered in the Y direction
+          var centerPatternYVal = (unitLength - (block1Length + carton2UsedLength)) / 2;
+
+          // Now we have a solid block of cartons. Shift them all such that they're centered on the pallet
+          for (let k = 0; k < tempSolution.solutionPositions.length; k++) {
+            tempSolution.solutionPositions[k].y += centerPatternYVal;
+          }
+		  
+			// Renumber position solutions based on X-Y weight for place ordering
+		  tempSolution.solutionPositions.sort(function (a, b) {
+			return X_WEIGHT * a.x + Y_WEIGHT * a.y > X_WEIGHT * b.x + Y_WEIGHT * b.y
+			  ? 1
+			  : X_WEIGHT * a.x + Y_WEIGHT * a.y < X_WEIGHT * b.x + Y_WEIGHT * b.y
+			  ? -1
+			  : 0;
+		   });
+		   
+          // Declare solution type, count/layer, pack eff. etc.
+          tempSolution.solutionType = 'Interlock';
+          tempSolution.countPerLayer = block1Solution.countPerLayer + block2Solution.countPerLayer;
+          tempSolution.packEfficiency = ((100 * (cartonWidth * cartonLength * tempSolution.countPerLayer)) / (unitWidth * unitLength)).toFixed(2) * 1;
+          tempSolution.totalUnitCount = maxLayerCount * tempSolution.countPerLayer;
+          //console.log('Pack Efficiency: ', tempSolution.packEfficiency);
+          // Push temp solution onto all solution's stack
+          interlockSolutions.push(tempSolution);
+          //console.log('...');
+        }
+      }
+
+      // Else Block 1 is Expanding in +X
+    } else if (setup >= 2){
+		
+      // Cycle through all possible iterations in current setup:
+      for (let i = 0; i <= Math.floor(Math.max(unitWidth, unitLength) / Math.min(cartonWidth, cartonLength)); i++) {
+        block1Length = unitLength;
+        block1Width = block1Rotation ? (i + 1) * cartonWidth : (i + 1) * cartonLength;
+        block2Length = unitLength;
+        block2Width = unitWidth - block1Width > 0 ? (unitWidth - block1Width).toFixed(4) * 1 : 0;
+        // If Block 2 width would be < 0. Just end this setup's cycle. Else i = i
+        i = unitWidth - block1Width ? i : 999;
+
+        // Ensure Block1 Width isn't so long such that there is no block 2
+        if (block1Width < unitWidth - Math.min(cartonWidth, cartonLength)) {
+          // Find the solution for Block 1 and Block 2
+          let block1Solution = createColumnPattern(cartonWidth, cartonLength, cartonHeight, block1Width, block1Length, unitHeight, block1Rotation, block1PackOption, block1AlignmentVector).pop();
+		  //console.log('block1Width: ' + block1Width + ' | block1Length: ' + block1Length + ' | block1Rotation: ' + block1Rotation + ' | block1PackOption: ' + block1PackOption + ' | block1AlignmentVector: ' + block1AlignmentVector);
+		  //console.log(JSON.stringify(block1Solution, null, 4));
+          var block2Solution = createColumnPattern(cartonWidth, cartonLength, cartonHeight, block2Width, block2Length, unitHeight, block2Rotation, block2PackOption, block2AlignmentVector).pop();
+		  //console.log('block2Width: ' + block2Width + ' | block2Length: ' + block2Length + ' | block2Rotation: ' + block2Rotation + ' | block2PackOption: ' + block2PackOption + ' | block2AlignmentVector: ' + block2AlignmentVector);
+		  //console.log(JSON.stringify(block2Solution, null, 4));
+
+          // Adjust all Y positions of Block 2 down such that Block 1 and Block 2 nest
+          for (let j = 0; j < block2Solution.solutionPositions.length; j++) {
+            block2Solution.solutionPositions[j].x = (block2Solution.solutionPositions[j].x + block1Width).toFixed(3) * 1;
+          }
+
+          // Combine both solutions into one
+          // Note: Combines block1Solution.solutionPositions && block2Solution.solutionPositions into one at tempSolution.solutionPositions
+          var tempSolution = {
+            solutionPositions: block1Solution.solutionPositions.concat(block2Solution.solutionPositions),
+          };
+
+          // Set X dimension and Y dimension based on input rotation
+          var carton2DimX = block2Rotation ? cartonWidth : cartonLength;
+
+          let carton2UsedWidth = (Math.floor(block2Width / carton2DimX) * carton2DimX).toFixed(4) * 1;
+		  
+		  
+		  tempSolution.unitWidth = (block1Width + carton2UsedWidth).toFixed(4) * 1;
+
+          // Determine how much we must shift the block in the X direction (since it's already centered in the Y direction
+          var centerPatternXVal = ((unitWidth - tempSolution.unitWidth) / 2).toFixed(4) * 1;
+		  //var centerPatternXVal = 0;
+		  console.log('Setup: ' + setup + ' | Iteration: ' + i);
+		  console.log('Unit Width: ' + unitWidth + ' | Solution Width: ' + tempSolution.unitWidth + ' | Remainder Width: ' + (unitWidth - tempSolution.unitWidth) + ' | Center Pattern X Val: ' + centerPatternXVal);
+
+          // Now we have a solid block of cartons. Shift them all such that they're centered on the pallet
+          for (let k = 0; k < tempSolution.solutionPositions.length; k++) {
+            //tempSolution.solutionPositions[k].x += centerPatternXVal;
+          }
+		  /*
+			// Renumber position solutions based on X-Y weight for place ordering
+		  tempSolution.solutionPositions.sort(function (a, b) {
+			return X_WEIGHT * a.x + Y_WEIGHT * a.y > X_WEIGHT * b.x + Y_WEIGHT * b.y
+			  ? 1
+			  : X_WEIGHT * a.x + Y_WEIGHT * a.y < X_WEIGHT * b.x + Y_WEIGHT * b.y
+			  ? -1
+			  : 0;
+		   });
+		   */
+          // Declare solution type, count/layer, pack eff. etc.
+          tempSolution.solutionType = 'Interlock';
+          tempSolution.countPerLayer = block1Solution.countPerLayer + block2Solution.countPerLayer;
+          tempSolution.packEfficiency =( (100 * (cartonWidth * cartonLength * tempSolution.countPerLayer)) / (unitWidth * unitLength) ).toFixed(2) * 1;
+          tempSolution.totalUnitCount = maxLayerCount * tempSolution.countPerLayer;
+		  tempSolution.setup = setup;
+		  tempSolution.iteration = i;
+		  tempSolution.unitWidth = block1Width + carton2UsedWidth;
+		  tempSolution.unitLength = block1Length;
+		  
+
+          // Push temp solution onto all solution's stack
+          interlockSolutions.push(tempSolution);
+        }
+      }
+    }
+
+  }
+
+  for (let i = 0; i < interlockSolutions.length; i++) {
+    //console.log('Interlock Solution', i, ' Pack Eff: ', interlockSolutions[i].packEfficiency);
+  }
+
+  return interlockSolutions;
+}
+
+	// Take the global variable for 'Layer Flip Type', and modify the positions based on that. Then return carton positions
+	// NOTE: inputLayerFlip values: 0 = No Flip, 1 = Flip Along X, 2 = Flip Along Y, 3 = Flip Along X & Y
+function layerFlip (cartonPositions){
+
+  console.log('Layer Flip... inputLayerFlip = ' + inputLayerFlip);
+	// Verify layer flip is needed, if so loop through positions, if not just return Carton Positions
+  if ( 1 <= inputLayerFlip && inputLayerFlip <= 3 ){
+	  console.log('Flipping Logic Active');
+	  console.log('Original cartonPositions: ', cartonPositions);
+		// Loop through all the carton positions and modify X & Y based on layer flip type
+	  for (let i = 0; i < cartonPositions.length; i++){
+			// IF Layer flip = 1 or 3 (Flip Along X or Flip Along X & Y), negate X value then add pallet width
+		if ( inputLayerFlip == 1 || inputLayerFlip == 3 ){
+			cartonPositions[i].x = (cartonPositions[i].x * -1) + palletWidth_mm;
+		}
+		  
+			// IF Layer flip = 2 or 3 (Flip Along Y or Flip Along X & Y), negate Y value then add pallet length
+		if ( inputLayerFlip == 2 || inputLayerFlip == 3 ){
+			cartonPositions[i].y = (cartonPositions[i].y * -1) + palletLength_mm;
+		}
+	  }
+	
+	  // After positions have been modified, resort cartons to number similar to original pattern
+	  // With the actual placement positions for all cartons, sort them based on defined direction
+  // Direction dictated by negative/positive values of X_WEIGHT and Y_WEIGHT s.t. builds from one corner to diagonal corner
+  // NOTE: +x +y -> from 0,0 to +,+ | -x +y -> from +,0 to 0,+ | +x -y -> from 0,+ to +, 0 | -x -y -> from +,+ to 0,0
+  /*
+  cartonPositions.sort(function (a, b) {
+    return X_WEIGHT * a.x + Y_WEIGHT * a.y > X_WEIGHT * b.x + Y_WEIGHT * b.y
+      ? 1
+      : X_WEIGHT * a.x + Y_WEIGHT * a.y < X_WEIGHT * b.x + Y_WEIGHT * b.y
+      ? -1
+      : 0;
+  });
+	  console.log('Flipped cartonPositions: ', cartonPositions);	  
+	  */
+  }
+  
+  return cartonPositions;
+}
+

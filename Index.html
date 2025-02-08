@@ -1,0 +1,299 @@
+<html lang="en">
+		<title>Index Title</title>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="src/css/style.css">
+  </head>
+  <body>	
+  <div id="selectionWrapper">
+    <div style="width: 33%"></div>
+    <div id="selectionDIV" style="width: 33%">
+        <select name="ductCalcSelect" class="selectType" size="1" style="margin-left: auto; min-width: 40 em">
+            <option value="minDuctSize">Minimum Duct Size for Given Conductors</option>
+            <option value="maxConductor">Maximum Conductors for Given Duct Size</option>
+        </select>
+    </div>
+  </div>
+
+  <div id="minDuctSizeWrapper" class="inputGridWrapper" >
+      <!-- Row 1: Header -->
+    <div class="inputGridWideMarginL"></div>
+    <div class="inputHeader">Wire Gauge</div>
+    <div class="inputHeader">Quantity of Conductor</div>
+    <div class="inputGridWideMarginR"></div>
+    <div class="inputGridWideMarginL"></div>
+      <!-- Row 2: Input Form -->
+    <div class="inputGridMediumCenter" style="display: flex;">
+      <form method="post" id="conductorInput" action="">
+          <!-- Members Will Be Added on Load & When Needed -->
+      </form>
+    </div>
+    <div class="inputGridWideMarginR"></div>
+
+      <!-- Row 3: Input Control Row -->
+    <div class="inputGridWideMarginL"></div>
+    <div class="inputGridMediumCenter" id="ductCalcButtonsContainer" style="display: none; margin: 2% 10% 7% 10%; ">
+      <input type="submit" class="formButton" id="conductorInputSubmit" value="Submit">
+      <input type="reset" class="formButton" id="conductorInputReset" value="Reset">
+    </div>
+    <div class="inputGridWideMarginR"></div>
+
+
+      <!-- Row 4: Wire Duct Table -->
+    <div></div>
+    <div id="wireDuctDisplayWrapper" class="inputGridWideCenter">
+      <div style="grid-row: 1/3; grid-column: 1/3; border-bottom: 1px solid black; border-right: 1px solid black; margin-right: -2.5px; margin-bottom: -2.5px;" class="headerDIV">Wire Duct Sizes Available</div>
+      <div style="grid-column: 3/12;" class="headerDIV">Duct Heights</div>
+
+      <div class="headerDIV">0.5"</div>
+      <div class="headerDIV">0.75"</div>
+      <div class="headerDIV">1"</div>
+      <div class="headerDIV">1.5"</div>
+      <div class="headerDIV">2"</div>
+      <div class="headerDIV">2.5"</div>
+      <div class="headerDIV">3"</div>
+      <div class="headerDIV">4"</div>
+      <div class="headerDIV">5"</div>
+
+      <div style="grid-row: 3/12; writing-mode: tb-rl;" class="headerDIV">Duct Widths</div>
+      <div class="headerDIV">0.5"</div>
+      <div id="wireDuctDisplayContainer">
+        <div id="wireDuctDisplayTable">
+            <!-- 0.5" Row -->
+          <div class="ductWidth0"></div>
+          <div>∄</div>
+          <div class="ductWidth0"></div>
+          <div>∄</div>
+          <div class="ductWidth0"></div>
+          <div>∄</div>
+          <div>∄</div>
+          <div>∄</div>
+          <div>∄</div>
+
+  
+            <!-- 0.75" Row -->
+          <div>∄</div>
+          <div class="ductWidth1"></div>
+          <div class="ductWidth1"></div>
+          <div class="ductWidth1"></div>
+          <div class="ductWidth1"></div>
+          <div>∄</div>
+          <div>∄</div>
+          <div>∄</div>
+          <div>∄</div>
+
+          
+            <!-- 1" Row -->
+          <div>∄</div>
+          <div>∄</div>
+          <div class="ductWidth2"></div>
+          <div class="ductWidth2"></div>
+          <div class="ductWidth2"></div>
+          <div class="ductWidth2"></div>
+          <div class="ductWidth2"></div>
+          <div class="ductWidth2"></div>
+          <div>∄</div>
+          
+            <!-- 1.5" Row -->
+          <div>∄</div>
+          <div>∄</div>
+          <div class="ductWidth3"></div>
+          <div class="ductWidth3"></div>
+          <div class="ductWidth3"></div>
+          <div class="ductWidth3"></div>
+          <div class="ductWidth3"></div>
+          <div class="ductWidth3"></div>
+          <div>∄</div>
+
+            <!-- 2" Row -->
+          <div>∄</div>
+          <div>∄</div>
+          <div class="ductWidth4"></div>
+          <div class="ductWidth4"></div>
+          <div class="ductWidth4"></div>
+          <div>∄</div>
+          <div class="ductWidth4"></div>
+          <div class="ductWidth4"></div>
+          <div class="ductWidth4"></div>
+
+
+            <!-- 2.5" Row -->
+          <div>∄</div>
+          <div>∄</div>
+          <div>∄</div>
+          <div>∄</div>
+          <div>∄</div>
+          <div class="ductWidth5"></div>
+          <div class="ductWidth5"></div>
+          <div>∄</div>
+          <div>∄</div>
+
+          
+            <!-- 3" Row -->
+          <div>∄</div>
+          <div>∄</div>
+          <div class="ductWidth6"></div>
+          <div>∄</div>
+          <div class="ductWidth6"></div>
+          <div class="ductWidth6"></div>
+          <div class="ductWidth6"></div>
+          <div class="ductWidth6"></div>
+          <div class="ductWidth6"></div>
+
+          
+            <!-- 4" Row -->
+          <div>∄</div>
+          <div>∄</div>
+          <div>∄</div>
+          <div class="ductWidth7"></div>
+          <div class="ductWidth7"></div>
+          <div>∄</div>
+          <div class="ductWidth7"></div>
+          <div class="ductWidth7"></div>
+          <div class="ductWidth7"></div>
+          
+            <!-- 6" Row -->
+          <div>∄</div>
+          <div>∄</div>
+          <div>∄</div>
+          <div>∄</div>
+          <div>∄</div>
+          <div>∄</div>
+          <div>∄</div>
+          <div class="ductWidth8"></div>
+          <div>∄</div>
+        </div>
+    </div>
+    <div class="headerDIV">0.75"</div>
+    <div class="headerDIV">1"</div>
+    <div class="headerDIV">1.5"</div>
+    <div class="headerDIV">2"</div>
+    <div class="headerDIV">2.5"</div>
+    <div class="headerDIV">3"</div>
+    <div class="headerDIV">4"</div>
+    <div class="headerDIV">6"</div>
+    <div></div>
+
+
+  </div>
+</div>
+
+  <div id="maxConductorCountWrapper" class="inputGridWrapper" style="display: grid">
+     <!-- Row 1: Header -->
+     <div class="inputGridWideMarginL"></div>
+     <div class="inputHeader inputGridMediumCenter">Duct Size Selection</div>
+     <div class="inputGridWideMarginR"></div>
+
+      <!-- Row 2: Duct Selection -->
+      <div class="inputGridWideMarginL"></div>
+      <div class="inputGridMediumCenter ductSizeDropDown">
+        <ul id="dropDownMenu" class="dropDownMenu">
+          <li><button class="dropDownMenuButton">Wire Duct Sizing</button>
+            <ul>
+              <li><button class="dropDownMenuButton dropDownMain">0.5" Width</button>
+                <ul>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(0.5,0.5)">0.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(0.5,1)">1" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(0.5,2)">2" Height</button></li>
+                </ul>
+              </li>
+              <li><button class="dropDownMenuButton dropDownMain">0.75" Width</button>
+                <ul>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(0.75,0.75)">0.75" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(0.75,1)">1" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(0.75,1.5)">1.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(0.75,2)">2" Height</button></li>
+                </ul>
+              </li>
+              <li><button class="dropDownMenuButton dropDownMain">1" Width</button>
+                <ul>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1,1)">1" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1,1.5)">1.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1,2)">2" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1,2.5)">2.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1,3)">3" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1,4)">4" Height</button></li>
+                </ul>
+              </li>
+              <li><button class="dropDownMenuButton dropDownMain">1.5" Width</button>
+                <ul>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1.5,1)">1" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1.5,1.5)">1.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1.5,2)">2" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1.5,2.5)">2.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1.5,3)">3" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1.5,4)">4" Height</button></li>
+                </ul>
+              </li>
+              <li><button class="dropDownMenuButton dropDownMain">2" Width</button>
+                <ul>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(2,1)">1" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(2,1.5)">1.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(2,2)">2" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(2,3)">3" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(2,4)">4" Height</button></li>
+                </ul>
+              </li>
+              <li><button class="dropDownMenuButton dropDownMain">2.5" Width</button>
+                <ul>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(2.5,2.5)">2.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(2.5,3)">3" Height</button></li>
+                </ul>
+              </li>
+              <li><button class="dropDownMenuButton dropDownMain">3" Width</button>
+                <ul>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(3,1)">1" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(3,1.5)">1.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(3,2)">2" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(3,2.5)">2.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(3,3)">3" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(3,4)">4" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(3,5)">5" Height</button></li>
+                </ul>
+              </li>
+              <li><button class="dropDownMenuButton dropDownMain">4" Width</button>
+                <ul>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(4,1.5)">1.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(4,2)">2" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(4,3)">3" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(4,4)">4" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(4,5)">5" Height</button></li>
+                </ul>
+              </li>
+              <li><button class="dropDownMenuButton dropDownMain">6" Width</button>
+                <ul>
+                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(6,4)">4" Height</button></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="inputGridWideMarginR"></div>
+
+      <!-- Row 3: Display Table -->
+      <div class="inputGridWideMarginL"></div>
+      <div class="inputGridWideCenter" id="conductorCountDisplayContainer">
+        <div id="conductorCountTable">
+          <div style="margin-right: -1px;">Wire Gauge</div>
+          <div style="margin-left: -1px;">Total Conductor Count</div>
+        </div>
+
+
+
+
+      </div>
+      <div class="inputGridWideMarginR"></div>
+
+  </div>
+  
+  <!-- JAVASCRIPT CALLS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">  </script>
+  <script src="src/js/bootstrap.min.js"></script>
+  <script src="src/js/script.js"></script>
+  <script type="text/javascript">
+ 
+  </script>
+  
+  </body>
+ </html>
