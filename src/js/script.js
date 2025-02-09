@@ -29,7 +29,23 @@ document.getElementById('conductorInputSubmit').addEventListener('click', calcDu
 
 document.getElementById('conductorInputReset').addEventListener('click', resetDuctSizeForm);
 
+document.getElementById('ductCalcSelect').addEventListener('change', updateCalcPage);
 
+
+function updateCalcPage(){
+    let pageElements = document.getElementsByClassName('inputGridWrapper');
+    let newCalcSelection = document.getElementById('ductCalcSelect').value;
+
+    pageElements.forEach((element) => {
+        if(element.name == newCalcSelection){
+            element.style.display = "grid";
+        } else {
+            element.style.display = "";
+        }
+    });
+
+
+}
 
 //---- Search the field to see if additional members should be added --//
 function updateConductorInput(){
