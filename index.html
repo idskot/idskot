@@ -6,29 +6,37 @@
   </head>
   <body>	
   <div id="selectionWrapper">
-    <div style="width: 33%"></div>
-    <div id="selectionDIV" style="width: 33%">
-        <select name="ductCalcSelect" class="selectType" size="1" style="margin-left: auto; min-width: 40 em">
-            <option value="minDuctSize">Minimum Duct Size for Given Conductors</option>
-            <option value="maxConductor">Maximum Conductors for Given Duct Size</option>
-        </select>
+    <div id="selectionDIV">
+      <select name="ductCalcSelect" id="ductCalcSelect" class="selectType" size="1" style="margin-left: auto; min-width: 40 em">
+          <option value="minDuctSize">Minimum Duct Size for Given Conductors</option>
+          <option value="maxConductorCount">Maximum Conductors for Given Duct Size</option>
+      </select>
     </div>
   </div>
 
-  <div id="minDuctSizeWrapper" class="inputGridWrapper" name="minDuctSize" style="display: grid">
+  <div id="minDuctSizeWrapper" class="inputGridWrapper active">
       <!-- Row 1: Header -->
     <div class="inputGridWideMarginL"></div>
     <div class="inputHeader">Wire Gauge</div>
     <div class="inputHeader">Quantity of Conductor</div>
     <div class="inputGridWideMarginR"></div>
-    <div class="inputGridWideMarginL"></div>
+
       <!-- Row 2: Input Form -->
-    <div class="inputGridMediumCenter" style="display: flex;">
-      <form method="post" id="conductorInput" action="">
-          <!-- Members Will Be Added on Load & When Needed -->
-      </form>
+    <div class="inputGridWideMarginL"></div> 
+
+    <form id="wireGaugeInput">
+      <div id="wireGaugeInputContainer">
+            <!-- Members Will Be Added on Load & When Needed -->
+      </div>
+    </form>
+
+    <form id="wireQuantityInput">
+      <div id="wireQuantityInputContainer">
+        <!-- Members Will Be Added on Load & When Needed -->
+      </div>
+    </form>
+    <div class="inputGridWideMarginR">
     </div>
-    <div class="inputGridWideMarginR"></div>
 
       <!-- Row 3: Input Control Row -->
     <div class="inputGridWideMarginL"></div>
@@ -42,21 +50,21 @@
       <!-- Row 4: Wire Duct Table -->
     <div></div>
     <div id="wireDuctDisplayWrapper" class="inputGridWideCenter">
-      <div style="grid-row: 1/3; grid-column: 1/3; border-bottom: 1px solid black; border-right: 1px solid black; margin-right: -2.5px; margin-bottom: -2.5px;" class="headerDIV">Wire Duct Sizes Available</div>
-      <div style="grid-column: 3/12;" class="headerDIV">Duct Heights</div>
+      <div id="wireDuctTableHeader">Wire Duct Sizes Available</div>
+      <div id="ductHeightHeader" >Duct Heights</div>
 
-      <div class="headerDIV">0.5"</div>
-      <div class="headerDIV">0.75"</div>
-      <div class="headerDIV">1"</div>
-      <div class="headerDIV">1.5"</div>
-      <div class="headerDIV">2"</div>
-      <div class="headerDIV">2.5"</div>
-      <div class="headerDIV">3"</div>
-      <div class="headerDIV">4"</div>
-      <div class="headerDIV">5"</div>
+      <div class="headerDIVTop">0.5"</div>
+      <div class="headerDIVTop">0.75"</div>
+      <div class="headerDIVTop">1"</div>
+      <div class="headerDIVTop">1.5"</div>
+      <div class="headerDIVTop">2"</div>
+      <div class="headerDIVTop">2.5"</div>
+      <div class="headerDIVTop">3"</div>
+      <div class="headerDIVTop">4"</div>
+      <div class="headerDIVTop">5"</div>
 
-      <div style="grid-row: 3/12; writing-mode: tb-rl;" class="headerDIV">Duct Widths</div>
-      <div class="headerDIV">0.5"</div>
+      <div id="ductWidthHeader">Duct Widths</div>
+      <div class="headerDIVSide">0.5"</div>
       <div id="wireDuctDisplayContainer">
         <div id="wireDuctDisplayTable">
             <!-- 0.5" Row -->
@@ -164,19 +172,141 @@
           <div>∄</div>
         </div>
     </div>
-    <div class="headerDIV">0.75"</div>
-    <div class="headerDIV">1"</div>
-    <div class="headerDIV">1.5"</div>
-    <div class="headerDIV">2"</div>
-    <div class="headerDIV">2.5"</div>
-    <div class="headerDIV">3"</div>
-    <div class="headerDIV">4"</div>
-    <div class="headerDIV">6"</div>
-    <div></div>
-
-
+    <div class="headerDIVSide">0.75"</div>
+    <div class="headerDIVSide">1"</div>
+    <div class="headerDIVSide">1.5"</div>
+    <div class="headerDIVSide">2"</div>
+    <div class="headerDIVSide">2.5"</div>
+    <div class="headerDIVSide">3"</div>
+    <div class="headerDIVSide">4"</div>
+    <div class="headerDIVSide">6"</div>
+      <div class="legendWrapper"><u>Legend:</u></div>
+      <div class="legendWrapper"><div class="legendDIV">∄</div>Size Does Not Exist</div>
+      <div class="legendWrapper"><div class="legendDIV" style="background-color: green">✓</div>Permissible Size</div>
+      <div class="legendWrapper"><div class="legendDIV" style="background-color: red">X</div>Unusable Size</div>
   </div>
+  <div></div>
+  
+    <!-- Row 5: Methodology -->
+    <div></div>
+    <div id="wireDuctMethodologyWrapper" class="inputGridWideCenter">
+    <details id="wireDuctMethodology">
+      <summary style="width: 50%;">Calculation Methodology</summary>
+      <div id="wireDuctMethodologyContainer">
+        <p>The calculation is based off the NFPA 79 section 13.5.2 (Note: I only have access to NFPA 79-2015. As such, I can't confirm the percent fill will be located in 13.5.2).
+        This section states the following:</p><br>
+        <blockquote><b>Percentage Fills of Raceways.</b> The combined cross-sectional area of all conductors and cables shall not exceed 50 percent of the interior cross-sectional area of the raceway. The fill provisions shall be based on the actual dimensions of the conductors or cables used.<br><p style="text-align: right;"><i>-NFPA 79 (2013), Section 13.5.2</i></p></blockquote><br><br>
+        <p>Located within the <b>Annex A Explanatory Material</b> there is an additional statement about section 13.5.2 that says the following:</p><br>
+        <blockquote>It should be recognized that, for certain conditions, a larger size raceway or a less raceway fill should be considered.<br><p style="text-align: right;"><i>-NFPA 79 (2013), A13.5.2</i></p></blockquote><br><br>
+        <p>Additionally, the manufacturer of wire duct Panduit™ has a section explaining this, as well as describing the 'Usable Duct Area'. Within, they state that accounting for the thickness of the material, 90% of the outside dimensions are actually usable. When combining with the requirements of NFPA79 13.5.2, that's 50% of 90% of outside dimensions, or a total of 45% of outside dimensions. This will be defined as the <b>Permissible Area</b>.</p><br>
+        <p>It should be noted that due to the nature of wires and routing the wires, a truly 50% fill wiring duct may appear to be completely filled due to the additional airspace created by non-uniformly sized and laid cables, interlacing, and other packing factors.</p><br><br>
+        
+        <p>Once wire duct permissible area is calculated, we must calculate the total cross-sectional area of the wires to be used.</p><br>
+        <blockquote>
+          $$A_{wire} = \pi r^{2}$$
+          $$A_{wire} = \frac\pi{4} D^{2}$$
+        </blockquote>
+        <p style="text-align: center;"><br>Where \(A_{wire}\) is the area of the wire<br>\(r\) is the radius of the wire<br>& \(D\) is the diameter of the wire.</p>
+        <p>The diameters are obtained within <b><i>NFPA 70 (2023) Table 8 (Conductor Properties)</b></i>. The following values are found in that table:<br></p>
+
+        <div id="conductorsPropertiesTableWrapper">
+          <table id="conductorPropertiesTable">
+            <tr>
+              <th>Size (AWG)</th>
+              <th>Diameter (in.)</th>
+              <th>Area (in.²)</th>
+            </tr>
+            <tr>
+              <td>18</td>
+              <td>0.046</td>
+              <td>0.002</td>
+            </tr>
+            <tr>
+              <td>16</td>
+              <td>0.058</td>
+              <td>0.003</td>
+            </tr>
+            <tr>
+              <td>14</td>
+              <td>0.073</td>
+              <td>0.004</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>0.092</td>
+              <td>0.006</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>0.116</td>
+              <td>0.011</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>0.146</td>
+              <td>0.017</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>0.184</td>
+              <td>0.027</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>0.232</td>
+              <td>0.042</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>0.26</td>
+              <td>0.053</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>0.292</td>
+              <td>0.067</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>0.332</td>
+              <td>0.087</td>
+            </tr>
+            <tr>
+              <td>1/0</td>
+              <td>0.372</td>
+              <td>0.109</td>
+            </tr>
+            <tr>
+              <td>2/0</td>
+              <td>0.418</td>
+              <td>0.137</td>
+            </tr>
+            <tr>
+              <td>3/0</td>
+              <td>0.47</td>
+              <td>0.173</td>
+            </tr>
+            <tr>
+              <td>4/0</td>
+              <td>0.528</td>
+              <td>0.219</td>
+            </tr>
+          </table>
+        </div><br>
+        <p>Using the values above, the total cross-sectional area is calculated based on the size and quantity input above. Once the required cross-sectional area is used, we compare that to the <b>Permissible Area</b> that was calculated previously. If the required cross-sectional area is less than or equal to the <b>Permissible Area</b> for a specific size wire duct, we conclude that's a valid choice. Once all available wire duct sizes are gone through, a script will update a table to indicate (with a green background and check mark) if it's a valid choice given the input. If it isn't, the cell will have it's background changed to red and be populated with an 'X' to indicate it cannot be used.</p><br>
+        <p><b>Possible Shortcomings:</b><br>
+        Due to the fact packing efficiency or any un-usable space is not being taken into account, it's possible (and perhaps likely) that utilizing a size on the border will result in "undesired results". Especially if many different sized conductors are being used in conjunction with each other. It is always better (and safer) to utilize a larger sized wire duct when possible.</p>
+        <p>Like with most free things online: use this with caution and verify.</p>
+      </div>
+    </details>
+
+    </div>
+    <div></div>
 </div>
+
+
+  <!-- Row 5: Methodology Detail -->
+
 
   <div id="maxConductorCountWrapper" class="inputGridWrapper" name="maxConductor">
      <!-- Row 1: Header -->
@@ -188,7 +318,7 @@
       <div class="inputGridWideMarginL"></div>
       <div class="inputGridMediumCenter ductSizeDropDown">
         <ul id="dropDownMenu" class="dropDownMenu">
-          <li><button class="dropDownMenuButton">Wire Duct Sizing</button>
+          <li><button class="dropDownMenuButton"><b>Wire Duct Sizing</b></button>
             <ul>
               <li><button class="dropDownMenuButton dropDownMain">0.5" Width</button>
                 <ul>
@@ -273,7 +403,8 @@
 
       <!-- Row 3: Display Table -->
       <div class="inputGridWideMarginL"></div>
-      <div class="inputGridWideCenter" id="conductorCountDisplayContainer">
+      <div class="inputGridWideCenter" id="conductorCountDisplayContainer" style="display: none;">
+        <div id="conductorCountHeader"></div>
         <div id="conductorCountTable">
           <div style="margin-right: -1px;">Wire Gauge</div>
           <div style="margin-left: -1px;">Total Conductor Count</div>
@@ -289,6 +420,7 @@
   
   <!-- JAVASCRIPT CALLS -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script src="src/js/bootstrap.min.js"></script>
   <script src="src/js/script.js"></script>
   <script type="text/javascript">

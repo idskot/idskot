@@ -20,10 +20,11 @@ const AWGTable = [
 
 
 window.addEventListener('load', initialTableFill());
+let wireGaugeInputForm = document.getElementById('wireGaugeInput');
+let wireQuantityInputForm = document.getElementById('wireQuantityInput');
 
-let conductorInputForm = document.getElementById('conductorInput');
-
-conductorInputForm.addEventListener('change', updateConductorInput);
+wireGaugeInputForm.addEventListener('change', updateConductorInput);
+wireQuantityInputForm.addEventListener('change', updateConductorInput);
 
 document.getElementById('conductorInputSubmit').addEventListener('click', calcDuctSizes);
 
@@ -32,17 +33,26 @@ document.getElementById('conductorInputReset').addEventListener('click', resetDu
 document.getElementById('ductCalcSelect').addEventListener('change', updateCalcPage);
 
 
+//---- When top selection is changed, go through all page elements --//
+//---- Remove class 'active' if area is not the one to be displayed --//
+//---- Add class 'active' to the area that is to be displayed --//
 function updateCalcPage(){
+        // Get elements & input values
     let pageElements = document.getElementsByClassName('inputGridWrapper');
     let newCalcSelection = document.getElementById('ductCalcSelect').value;
 
-    pageElements.forEach((element) => {
-        if(element.name == newCalcSelection){
-            element.style.display = "grid";
+        // Go through all page elements
+    for (let i = 0; i < pageElements.length; i++){
+            // If the page id matches selection, add 'active' class
+                // NOTE: The slice is to remove the 'Wrapper' section of ID while retaining the information on the page
+        if ( pageElements[i].id.slice(0,-7) == newCalcSelection ) {            
+            pageElements[i].classList.add('active');
+            // Else the page is to be hidden, if it has the 'active' class remove it
         } else {
-            element.style.display = "";
+            pageElements[i].classList.remove('active');
         }
-    });
+
+    };
 
 
 }
@@ -51,10 +61,24 @@ function updateCalcPage(){
 function updateConductorInput(){
         // Retrieve the conductor form and set variable for the children
     console.log('Change Detected!');
-	let conductorForm = document.getElementById('conductorInput');
-    let conductorFormChildren = conductorForm.children;
-        // Calculate total number of rows, two children per row
-    let conductorFormRows = (conductorFormChildren.length)/2;
+	let wireGaugeInputFormChildren = document.getElementById('wireGaugeInputContainer').children;
+    let wireQuantityInputFormChildren = document.getElementById('wireQuantityInputContainer').children;
+
+    console.log(wireQuantityInputForm);
+
+    if(wireGaugeInputFormChildren.length != wireQuantityInputFormChildren.length){
+        alert('Something went wrong, duderino!');
+    }
+        // Store total number of rows
+    let conductorFormRows = (wireGaugeInputFormChildren.length);
+
+    console.log('Children Length...' + wireGaugeInputFormChildren.length);
+    if(wireQuantityInputFormChildren[0].children[0].value > 0){
+        console.log('First Member Bool Count');
+    } else {
+        console.log('First Member !Bool');
+    }
+
 
         // Initialize variable to store how many rows are filled
     let rowsFilled = 0;
@@ -62,9 +86,9 @@ function updateConductorInput(){
         // Go through each row of the form
     for(let i = 0; i < conductorFormRows; i++){
             // If both children (wire gauge selection & quantity of conductors) are filled, increment 'rowsFilled' variable
-        rowsFilled = (conductorFormChildren[i * 2].children[0].value && conductorFormChildren[1 + (i * 2)].children[0].value) ? rowsFilled + 1 : rowsFilled;
+        rowsFilled = (wireGaugeInputFormChildren[i].children[0].value && (wireQuantityInputFormChildren[i].children[0].value > 0)) ? rowsFilled + 1 : rowsFilled;
             // Check to see if first column is filled, increment to indicate user has input something
-        wireGaugeColumnFilled = conductorFormChildren[i * 2].children[0].value ? wireGaugeColumnFilled + 1: wireGaugeColumnFilled;
+        wireGaugeColumnFilled = wireGaugeInputFormChildren[i].children[0].value ? wireGaugeColumnFilled + 1: wireGaugeColumnFilled;
     }
         // Read out to console for debug
     console.log('Rows Filled... ' + rowsFilled + '... AWG Column Filled: ' + wireGaugeColumnFilled);
@@ -81,20 +105,42 @@ function updateConductorInput(){
 
 	// Helper function to add an input field to the 'Conductor Input' Table*
 function addInputCalcField(inputFieldNum){
+    console.log('Adding Input Calc Field... Input Field Num: ' + inputFieldNum);
+        // Create a new DIV & select option for Wire Gauge selection
+    let newWireGaugeChild = document.createElement("div");
+    let newWireGaugeElement = document.createElement("select");
+        // Set the class name and id for later usage
+    newWireGaugeElement.className = 'conductorGaugeInput';
+    newWireGaugeElement.id = 'conductorGaugeInput' + inputFieldNum;
 
-            // Add the divisions to the form
-        $("<div><select id='conductorGaugeInput" + inputFieldNum + "' name='conductorGaugeInput" + inputFieldNum + "' size='1'></select></div><div><input type='number' id='conductorQty" + inputFieldNum + "' name='conductorQty" + inputFieldNum + "'></input></div>").appendTo('#conductorInput');
+        // Loop through all of the AWG Table and add a child element for each member of the AWG Table
+    for(let i=0; i < 16; i++){ 
+        var wireGauge = AWGTable[i];
+        var optionElement = document.createElement("option");
+        optionElement.textContent = wireGauge;
+        optionElement.value = wireGauge;
+        newWireGaugeElement.appendChild(optionElement);            
+    }
+        // Append the select element to the div element
+    newWireGaugeChild.appendChild(newWireGaugeElement);
+    newWireGaugeChild.className = 'conductorGaugeInputElement';
+        // Append entire child to 'wire gauge input' container
+    document.getElementById('wireGaugeInputContainer').appendChild(newWireGaugeChild);
 
-            // Store the last select field added
-        let lastAddedSelectField = document.getElementById('conductorGaugeInput' + inputFieldNum);
-            // Loop through all of the AWG Table and add a child element for each member of the AWG Table
-        for(let i=0; i < 16; i++){ 
-            var wireGauge = AWGTable[i];
-            var optionElement = document.createElement("option");
-            optionElement.textContent = wireGauge;
-            optionElement.value = wireGauge;
-            lastAddedSelectField.appendChild(optionElement);            
-        }
+        // Create a new DIV & input element, set type to number
+    let newWireQuantityChild = document.createElement("div");
+    let newWireQuantityElement = document.createElement("input");
+    newWireQuantityElement.type = "number";
+    newWireQuantityElement.min = 0;
+        // Set the class name and id for later usage
+    newWireQuantityElement.className = 'conductorQuantityInput'
+    newWireQuantityElement.id = 'conductorQty' + inputFieldNum;
+        // Append the input element to the div element
+    newWireQuantityChild.appendChild(newWireQuantityElement);
+    newWireQuantityChild.className = 'conductorQuantityInputElement';
+        // Append entire DIV to wire quantity input container
+    document.getElementById('wireQuantityInputContainer').appendChild(newWireQuantityChild);
+
 
 }
 
@@ -122,19 +168,31 @@ function calcDuctSizes(){
     ];
 
     let inputWireGauges = [];   // Array to store objects of 
-    let conductorForm = document.getElementById('conductorInput');
-    let conductorFormChildren = conductorForm.children;
+    let conductorGaugeForm = document.getElementById('wireGaugeInputContainer');
+    let conductorGaugeFormChildren = conductorGaugeForm.children;
+    let conductorQuantityForm = document.getElementById('wireQuantityInputContainer');
+    let conductorQuantityFormChildren = conductorQuantityForm.children;
+
+    console.log('Calc Duct Sizes...');
+    console.log(conductorGaugeFormChildren[0].children[0].value);
+    console.log(conductorQuantityFormChildren);
+
+    if (conductorGaugeFormChildren.length != conductorQuantityFormChildren.length) {
+        alert('Something Went Terribly Wrong!!! Child Length Mismatch');
+        return -20;
+    }
+
         // Calculate total number of rows, two children per row
-    let conductorFormRows = (conductorFormChildren.length)/2;
+    let conductorFormRows = (conductorGaugeFormChildren.length)/2;
 
         // Initialize variable to store how many rows are filled
     let rowsFilled = 0;
         // Go through each row of the form
     for(let i = 0; i < conductorFormRows; i++){
             // Check to see if both wire gauge and quantity have values
-        if(conductorFormChildren[i * 2].children[0].value && conductorFormChildren[1 + (i * 2)].children[0].value){
+        if(conductorGaugeFormChildren[i].children[0].value && conductorQuantityFormChildren[i].children[0].value){
             // If so, store the gauge and quantity into memory
-            inputWireGauges.push({gauge: conductorFormChildren[i * 2].children[0].value, quantity: parseInt(conductorFormChildren[1 + (i * 2)].children[0].value)});
+            inputWireGauges.push({gauge: conductorGaugeFormChildren[i].children[0].value, quantity: parseInt(conductorQuantityFormChildren[i].children[0].value)});
         }
     }
 
@@ -195,12 +253,6 @@ function calcDuctSizes(){
                 ductTableRow[i].style.background = "red";
                 ductTableRow[i].textContent = "X";
             }
-
-            if(ductSizes[index].width == 3){
-                console.log('3 inch... Current Height [' + i + ']: ' + ductSizes[index].height[i] + ' ... Index: ' + usableDuctSize[index].height.indexOf(ductSizes[index].height[i]));
-                console.log(usableDuctSize[index]);
-                console.log('Duct Table Row Length... ' +  ductTableRow.length);
-            }
        };
     });
 
@@ -216,20 +268,29 @@ function resetDuctSizeForm () {
     console.log('Resetting Duct Size Form...');
 
         // Retrieve form for modification
-    let ductSizeForm = document.getElementById('conductorInput');
-    let ductSizeFormChildren = ductSizeForm.children;
+    let wireGaugeInputForm = document.getElementById('wireGaugeInputContainer')
+	let wireGaugeInputFormChildren = wireGaugeInputForm.children;
+    let wireQuantityInputForm = document.getElementById('wireQuantityInputContainer');
+	let wireQuantityInputFormChildren = wireQuantityInputForm.children;
 
-        // Remove any children after the 6th (3rd row)
-    if(ductSizeForm.children.length > 6){
-        for (let i = ductSizeForm.children.length; i > 6; i--){
-            ductSizeForm.removeChild(ductSizeForm.lastChild);
+
+        // Remove any children after the 3rd
+    if(wireGaugeInputForm.children.length > 3){
+        for (let i = 0; i < wireGaugeInputForm.children.length - 3; i++){
+            wireGaugeInputForm.removeChild(wireGaugeInputForm.lastChild);
         }
     }
 
+    if(wireQuantityInputForm.children.length > 3){
+        for (let i = 0; i < wireQuantityInputForm.children.length - 3; i++){
+            wireQuantityInputForm.removeChild(wireQuantityInputForm.lastChild);
+        }
+    }    
+
         // Clear fields
     for (let i = 0; i < 3; i++){
-        ductSizeFormChildren[i * 2].children[0].value = '';
-        ductSizeFormChildren[(i * 2) + 1].children[0].value = '';
+        wireGaugeInputFormChildren[i].children[0].value = '';
+        wireQuantityInputFormChildren[i].children[0].value = '';
     }
     
         // Finally hide the table and control buttons
@@ -238,6 +299,7 @@ function resetDuctSizeForm () {
 }
 
 
+    // For 'Max Conductor for Given Duct Size', allow last selection to be highlighted in drop-down
 document.querySelectorAll(".dropDownMain").forEach((item) => {
     item.addEventListener("mouseover", function() {
         document.querySelectorAll(".dropDownMain").forEach((li) => li.classList.remove("active"));
@@ -245,7 +307,7 @@ document.querySelectorAll(".dropDownMain").forEach((item) => {
     });
 });
 
-
+    // Calculate max conductor count for a given duct size
 function ductSelect(inputWidth, inputHeight){
     if (isNaN(inputWidth)){
         throw new Error("Input Width Invalid");
@@ -292,7 +354,6 @@ function ductSelect(inputWidth, inputHeight){
         conductorTableParent.appendChild(quantityDisplayElement);
     }
 
-    console.log('Conductor Quantity...');
-    console.log(conductorQuantity);
-
+    document.getElementById('conductorCountDisplayContainer').style.display = '';
+    document.getElementById('conductorCountHeader').textContent = 'Displaying Values for: ' + inputWidth +'"w x ' + inputHeight +'"h Wire Duct';
 }
