@@ -296,11 +296,11 @@ input[type='number'], input[type='text']{
   border: 1px solid black;
 }
 
-#wireDuctMethodologyWrapper {
+.methodologyWrapper {
   width: 100%;
 }
 
-#wireDuctMethodology {
+.methodologyDetail {
   width: 80%;
   margin: 0 auto ;
   background: var(--idleColor);
@@ -310,7 +310,7 @@ input[type='number'], input[type='text']{
   overflow: hidden;
 }
 
-#wireDuctMethodology summary {
+.methodologyDetail summary {
   padding: 1rem;
   display: block;
   background: var(--idleColor);
@@ -322,7 +322,7 @@ input[type='number'], input[type='text']{
   user-select: none;
 }
 
-#wireDuctMethodology summary:before {
+.methodologyDetail summary:before {
   content: '';
   border-width: .4rem;
   border-style: solid;
@@ -336,46 +336,51 @@ input[type='number'], input[type='text']{
 }
 
 
-#wireDuctMethodology[open] > summary:before {
+.methodologyDetail[open] summary:before {
   transform: rotate(90deg);
 }
 
 
-#wireDuctMethodology summary::-webkit-details-marker {
-  display:none;
+summary::-webkit-details-marker {
+  display: none;
 }
 
-#wireDuctMethodology #wireDuctMethodologyContainer {
+.methodologyDetail .methodologyContainer {
   border-radius: 5px;
   border: 1px solid var(--idleColor);
   background-color: var(--idleColorLite);
   padding-top: 0.5em;
 }
 
-#wireDuctMethodologyContainer > blockquote {
-  width: 50%;
-  margin-left: 25%;
+.methodologyContainer blockquote {
+  width: 75%;
+  margin-left: 12.5%;
   padding: 0.5em 1em;
   background-color: var(--idleColor);
+  font-style: italic;
 }
 
-#wireDuctMethodologyContainer > p {
+.methodologyContainer p {
   vertical-align: center;
   text-indent: 2em;
   padding: 0 5%;
 }
 
-#conductorsPropertiesTableWrapper {
+.conductorsPropertiesTableWrapper {
   width: 100%;
   margin: 0 35%;
 }
 
-#conductorPropertiesTable {
+.conductorPropertiesTable {
   text-align: center;
   width: 30%;
 }
 
-#conductorPropertiesTable, #conductorPropertiesTable th, #conductorPropertiesTable td {
+.conductorPropertiesTable tr:nth-child(odd){
+  background-color: var(--idleColor);
+}
+
+.conductorPropertiesTable, .conductorPropertiesTable th, .conductorPropertiesTable td {
   border: 1px solid black;
   border-collapse: collapse;
   padding: 0.1em 0.25em;
@@ -385,6 +390,7 @@ input[type='number'], input[type='text']{
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 999;
 }
 
 ul {

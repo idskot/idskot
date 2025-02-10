@@ -193,6 +193,7 @@ function calcDuctSizes(){
         if(conductorGaugeFormChildren[i].children[0].value && conductorQuantityFormChildren[i].children[0].value){
             // If so, store the gauge and quantity into memory
             inputWireGauges.push({gauge: conductorGaugeFormChildren[i].children[0].value, quantity: parseInt(conductorQuantityFormChildren[i].children[0].value)});
+            rowsFilled += 1;
         }
     }
 
@@ -329,16 +330,18 @@ function ductSelect(inputWidth, inputHeight){
             conductorTableParent.removeChild(conductorTableParent.lastChild);   
         }         
     }
-
+        
+        // Calculate total usable area within the wire duct, that is 90% when account for wall and top.
         // Calculate total usable area. Allow 90% of area for top and walls, then 50% of actual area to pass code. 90% * 50% = 45% = 0.45
+    let usableWidth_inch = parseFloat(inputWidth) * 0.9;
     let usableHeight_inch = parseFloat(inputHeight) * 0.45;
     let usableArea_inch =inputWidth * usableHeight_inch;
 
-    console.log('Calculating Total Number of Conductors for Width: ' + inputWidth + ', Height: ' + inputHeight + '... Usable Height: ' + usableHeight_inch);
+    console.log('Calculating Total Number of Conductors for Width: ' + inputWidth + ', Height: ' + inputHeight + '... Usable Width: ' + usableWidth_inch + ', Usable Height: ' + usableHeight_inch);
 
     let conductorQuantity = [];
     for(let i = 17; i < AWGTable.length; i++){
-        let conductorCountWidth = Math.floor(inputWidth/AWGTable[i].diameter_inch);
+        let conductorCountWidth = Math.floor(usableWidth_inch/AWGTable[i].diameter_inch);
         let conductorCountHeight = Math.floor(usableHeight_inch/AWGTable[i].diameter_inch); 
         let totalConductorCount = conductorCountWidth * conductorCountHeight;
         let conductorArea_inch = totalConductorCount * AWGTable[i].area_inch;

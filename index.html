@@ -1,5 +1,5 @@
 <html lang="en">
-		<title>Index Title</title>
+		<title>Scott's Calculations</title>
 	<head>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="src/css/style.css">
@@ -187,13 +187,13 @@
   </div>
   <div></div>
   
-    <!-- Row 5: Methodology -->
+    <!-- Row 5: Methodology Detail-->
     <div></div>
-    <div id="wireDuctMethodologyWrapper" class="inputGridWideCenter">
-    <details id="wireDuctMethodology">
-      <summary style="width: 50%;">Calculation Methodology</summary>
-      <div id="wireDuctMethodologyContainer">
-        <p>The calculation is based off the NFPA 79 section 13.5.2 (Note: I only have access to NFPA 79-2015. As such, I can't confirm the percent fill will be located in 13.5.2).
+    <div id="wireDuctMethodologyWrapper" class="inputGridWideCenter methodologyWrapper">
+    <details id="wireDuctMethodology" class="methodologyDetail">
+      <summary>Calculation Methodology</summary>
+      <div id="wireDuctMethodologyContainer" class="methodologyContainer">
+        <p>The calculation is based off the NFPA 79 section 13.5.2 (Author's Notes: I only have access to NFPA 79-2015. As such, I can't confirm the percent fill will be located in 13.5.2).
         This section states the following:</p><br>
         <blockquote><b>Percentage Fills of Raceways.</b> The combined cross-sectional area of all conductors and cables shall not exceed 50 percent of the interior cross-sectional area of the raceway. The fill provisions shall be based on the actual dimensions of the conductors or cables used.<br><p style="text-align: right;"><i>-NFPA 79 (2013), Section 13.5.2</i></p></blockquote><br><br>
         <p>Located within the <b>Annex A Explanatory Material</b> there is an additional statement about section 13.5.2 that says the following:</p><br>
@@ -209,8 +209,8 @@
         <p style="text-align: center;"><br>Where \(A_{wire}\) is the area of the wire<br>\(r\) is the radius of the wire<br>& \(D\) is the diameter of the wire.</p>
         <p>The diameters are obtained within <b><i>NFPA 70 (2023) Table 8 (Conductor Properties)</b></i>. The following values are found in that table:<br></p>
 
-        <div id="conductorsPropertiesTableWrapper">
-          <table id="conductorPropertiesTable">
+        <div class="conductorsPropertiesTableWrapper">
+          <table class="conductorPropertiesTable">
             <tr>
               <th>Size (AWG)</th>
               <th>Diameter (in.)</th>
@@ -293,7 +293,8 @@
             </tr>
           </table>
         </div><br>
-        <p>Using the values above, the total cross-sectional area is calculated based on the size and quantity input above. Once the required cross-sectional area is used, we compare that to the <b>Permissible Area</b> that was calculated previously. If the required cross-sectional area is less than or equal to the <b>Permissible Area</b> for a specific size wire duct, we conclude that's a valid choice. Once all available wire duct sizes are gone through, a script will update a table to indicate (with a green background and check mark) if it's a valid choice given the input. If it isn't, the cell will have it's background changed to red and be populated with an 'X' to indicate it cannot be used.</p><br>
+        <p>Using the values above, the total cross-sectional area is calculated based on the size and quantity input above. Once the required cross-sectional area is used, we compare that to the <b>Permissible Area</b> that was calculated previously. If the required cross-sectional area is less than or equal to the <b>Permissible Area</b> for a specific size wire duct, we conclude that's a valid choice. All available wire duct sizes are compared to this value and determined if the size can be used or not. Once completed, a script will update a table to indicate to indicate the specific wire duct size is a valid choice by marking the box with a green background and check mark. If the specific size is not a valid choice, the cell will have it's background changed to red and be populated with an 'X' to indicate it cannot be used.</p>
+        <p>As a note, a size which is not available will be indicated by the '∄' symbol. This symbol is used in mathematics to indicate 'does not exist'.</p><br>
         <p><b>Possible Shortcomings:</b><br>
         Due to the fact packing efficiency or any un-usable space is not being taken into account, it's possible (and perhaps likely) that utilizing a size on the border will result in "undesired results". Especially if many different sized conductors are being used in conjunction with each other. It is always better (and safer) to utilize a larger sized wire duct when possible.</p>
         <p>Like with most free things online: use this with caution and verify.</p>
@@ -305,7 +306,6 @@
 </div>
 
 
-  <!-- Row 5: Methodology Detail -->
 
 
   <div id="maxConductorCountWrapper" class="inputGridWrapper" name="maxConductor">
@@ -416,6 +416,120 @@
       </div>
       <div class="inputGridWideMarginR"></div>
 
+      <!-- Row 4: Methodology -->
+       <div></div>
+       <div id="maxConductorCountMethodologyWrapper" class="inputGridWideCenter methodologyWrapper">
+        <details id="maxConductorCountMethodology" class="methodologyDetail">
+          <summary>Calculation Methodology</summary>
+          <div id="maxConductorCountMethodologyContainer" class="methodologyContainer">
+            <p>Unlike the first calculator (Minimum Duct Size for Given Conductors), the method for calculating the wire count takes into account packing. Square packing is being utilized to determine total wire count. The rationale is two fold, firstly due to real-world factors, it is near impossible for a wire duct to be run and routed perfectly such that an ideal amount of conductors would fit. The second reason is that it makes the math, like, <i>super</i> easy.</p>
+            <p>The method utilizes the values found in <b><i>NFPA79 (2013) Table 8 (Conductor Properties)</i></b>. The table is as such:</p><br>
+            <div class="conductorsPropertiesTableWrapper">
+              <table class="conductorPropertiesTable">
+                <tr>
+                  <th>Size (AWG)</th>
+                  <th>Diameter (in.)</th>
+                  <th>Area (in.²)</th>
+                </tr>
+                <tr>
+                  <td>18</td>
+                  <td>0.046</td>
+                  <td>0.002</td>
+                </tr>
+                <tr>
+                  <td>16</td>
+                  <td>0.058</td>
+                  <td>0.003</td>
+                </tr>
+                <tr>
+                  <td>14</td>
+                  <td>0.073</td>
+                  <td>0.004</td>
+                </tr>
+                <tr>
+                  <td>12</td>
+                  <td>0.092</td>
+                  <td>0.006</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>0.116</td>
+                  <td>0.011</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>0.146</td>
+                  <td>0.017</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>0.184</td>
+                  <td>0.027</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>0.232</td>
+                  <td>0.042</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>0.26</td>
+                  <td>0.053</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>0.292</td>
+                  <td>0.067</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>0.332</td>
+                  <td>0.087</td>
+                </tr>
+                <tr>
+                  <td>1/0</td>
+                  <td>0.372</td>
+                  <td>0.109</td>
+                </tr>
+                <tr>
+                  <td>2/0</td>
+                  <td>0.418</td>
+                  <td>0.137</td>
+                </tr>
+                <tr>
+                  <td>3/0</td>
+                  <td>0.47</td>
+                  <td>0.173</td>
+                </tr>
+                <tr>
+                  <td>4/0</td>
+                  <td>0.528</td>
+                  <td>0.219</td>
+                </tr>
+              </table>
+            </div><br>
+            <p>With the wire diameter for a given gauge determined, the calculation is as follows. First, we must calculate total amount of usable area. To do that, we must refer to <b><i>NFPA79 (2013) Section 13.5.2</i></b> (Author's Notes: I only have access to NFPA 79-2015. As such, I can't confirm the percent fill will be located in 13.5.2).
+            This section states the following:</p><br>
+            <blockquote><b>Percentage Fills of Raceways.</b> The combined cross-sectional area of all conductors and cables shall not exceed 50 percent of the interior cross-sectional area of the raceway. The fill provisions shall be based on the actual dimensions of the conductors or cables used.<br><p style="text-align: right;"><i>-NFPA 79 (2013), Section 13.5.2</i></p></blockquote><br>
+            <p>Located within the <b>Annex A Explanatory Material</b> there is an additional statement about section 13.5.2 that says the following:</p><br>
+            <blockquote>It should be recognized that, for certain conditions, a larger size raceway or a less raceway fill should be considered.<br><p style="text-align: right;"><i>-NFPA 79 (2013), A13.5.2</i></p></blockquote><br>
+            <p>Additionally, the manufacturer of wire duct Panduit™ has a section explaining this, as well as describing the 'Usable Duct Area'. Within, they state that accounting for the thickness of the material, 90% of the outside dimensions are actually usable. When combining with the requirements of NFPA79 13.5.2, that's 50% of 90% of outside dimensions, or for what is being utilized for this calculation, total of 45% of the outside height dimension. This will be defined as the <b>Usable Height</b>. Additionally, we should scale the width by a factor of 90%. This will remove wall thickness and determine how many conductors can fit along the width. This shall be defined as the <b>Usable Width</b>.</p><br>
+            <p>It should be noted that due to the nature of wires and routing the wires, a truly 50% fill wiring duct may appear to be completely filled due to the additional airspace created by non-uniformly sized and laid cables, interlacing, and other packing factors.</p><br>
+            <p>Once the duct size has been determined, we can simply find the height and scale it by a factor of 0.45.</p>
+            <blockquote>
+              $$W_{usable} = W_{nominal} * 0.9$$
+              $$H_{usable} = H_{nominal} * 0.45$$</blockquote>
+            <p>When the <b>Usable Width</b> & the<b>Usable Height</b> has been determined, we simply find how many of the conductors can fit along the <b>Usable Width</b>, and how many can fit among the <b>Usable Height</b>, then multiply these two values together to get the total number of conductors. I.E.:</p>
+            <blockquote>$$Count_{alongUsableWidth} = floor( \frac{W_{usable}}{D_{wire}} )$$
+                        $$Count_{alongUsableHeight} = floor ( \frac{H_{usable}}{D_{wire}} )$$
+                        $$Count_{total} = Count_{alongWidth} * Count_{alongUsableHeight}$$</blockquote>
+            <p>The benefits of calculating the count this way is it takes into account unusable space. The script goes through wire gauges 18-4/0 and calculates total number of conductors that could fit in the usable area with perfectly square packing. Once calculated, it will populate the chart with the correct count based on the wire guage next to it.</p>
+            <p><b>Possible Shortcomings:</b><br>
+            It is improbable to run the wires in the duct in a perfectly square pattern. As such, these numbers should be reviewed and handled with skepticism, understanding that it's calculating in an ideal environment. Whenever possible, larger wire ducts should be used.</p>
+            <p>Like with most free things online: use this with caution and verify.</p>
+            </details>
+        </div>
+      </div>
   </div>
   
   <!-- JAVASCRIPT CALLS -->
