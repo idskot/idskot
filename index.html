@@ -197,7 +197,7 @@
         This section states the following:</p><br>
         <blockquote><b>Percentage Fills of Raceways.</b> The combined cross-sectional area of all conductors and cables shall not exceed 50 percent of the interior cross-sectional area of the raceway. The fill provisions shall be based on the actual dimensions of the conductors or cables used.<br><p style="text-align: right;"><i>-NFPA 79 (2013), Section 13.5.2</i></p></blockquote><br><br>
         <p>Located within the <b>Annex A Explanatory Material</b> there is an additional statement about section 13.5.2 that says the following:</p><br>
-        <blockquote>It should be recognized that, for certain conditions, a larger size raceway or a less raceway fill should be considered.<br><p style="text-align: right;"><i>-NFPA 79 (2013), A13.5.2</i></p></blockquote><br><br>
+        <blockquote>It should be recognized that, for certain conditions, a larger size raceway or a less raceway fill should be considered.<br><p style="text-align: right;"><i>-NFPA 79 (2015), A13.5.2</i></p></blockquote><br><br>
         <p>Additionally, the manufacturer of wire duct Panduit™ has a section explaining this, as well as describing the 'Usable Duct Area'. Within, they state that accounting for the thickness of the material, 90% of the outside dimensions are actually usable. When combining with the requirements of NFPA79 13.5.2, that's 50% of 90% of outside dimensions, or a total of 45% of outside dimensions. This will be defined as the <b>Permissible Area</b>.</p><br>
         <p>It should be noted that due to the nature of wires and routing the wires, a truly 50% fill wiring duct may appear to be completely filled due to the additional airspace created by non-uniformly sized and laid cables, interlacing, and other packing factors.</p><br><br>
         
@@ -318,81 +318,81 @@
       <div class="inputGridWideMarginL"></div>
       <div class="inputGridMediumCenter ductSizeDropDown">
         <ul id="dropDownMenu" class="dropDownMenu">
-          <li><button class="dropDownMenuButton"><b>Wire Duct Sizing</b></button>
-            <ul>
-              <li><button class="dropDownMenuButton dropDownMain">0.5" Width</button>
-                <ul>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(0.5,0.5)">0.5" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(0.5,1)">1" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(0.5,2)">2" Height</button></li>
+          <li><button id="wireDuctSizingHeaderButton" class="dropDownMenuButton dropDownHeader"><b>Wire Duct Sizing</b></button>
+            <ul class="dropDownFirstList">
+              <li><button class="dropDownMenuButton">0.5" Width</button>
+                <ul class="dropDownSubMenu">
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(0.5,0.5)">0.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(0.5,1)">1" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(0.5,2)">2" Height</button></li>
                 </ul>
               </li>
-              <li><button class="dropDownMenuButton dropDownMain">0.75" Width</button>
-                <ul>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(0.75,0.75)">0.75" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(0.75,1)">1" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(0.75,1.5)">1.5" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(0.75,2)">2" Height</button></li>
+              <li><button class="dropDownMenuButton">0.75" Width</button>
+                <ul class="dropDownSubMenu">
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(0.75,0.75)">0.75" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(0.75,1)">1" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(0.75,1.5)">1.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(0.75,2)">2" Height</button></li>
                 </ul>
               </li>
-              <li><button class="dropDownMenuButton dropDownMain">1" Width</button>
-                <ul>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1,1)">1" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1,1.5)">1.5" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1,2)">2" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1,2.5)">2.5" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1,3)">3" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1,4)">4" Height</button></li>
+              <li><button class="dropDownMenuButton">1" Width</button>
+                <ul class="dropDownSubMenu">
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(1,1)">1" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(1,1.5)">1.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(1,2)">2" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(1,2.5)">2.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(1,3)">3" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(1,4)">4" Height</button></li>
                 </ul>
               </li>
-              <li><button class="dropDownMenuButton dropDownMain">1.5" Width</button>
-                <ul>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1.5,1)">1" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1.5,1.5)">1.5" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1.5,2)">2" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1.5,2.5)">2.5" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1.5,3)">3" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(1.5,4)">4" Height</button></li>
+              <li><button class="dropDownMenuButton">1.5" Width</button>
+                <ul class="dropDownSubMenu">
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(1.5,1)">1" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(1.5,1.5)">1.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(1.5,2)">2" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(1.5,2.5)">2.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(1.5,3)">3" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(1.5,4)">4" Height</button></li>
                 </ul>
               </li>
-              <li><button class="dropDownMenuButton dropDownMain">2" Width</button>
-                <ul>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(2,1)">1" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(2,1.5)">1.5" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(2,2)">2" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(2,3)">3" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(2,4)">4" Height</button></li>
+              <li><button class="dropDownMenuButton">2" Width</button>
+                <ul class="dropDownSubMenu">
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(2,1)">1" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(2,1.5)">1.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(2,2)">2" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(2,3)">3" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(2,4)">4" Height</button></li>
                 </ul>
               </li>
-              <li><button class="dropDownMenuButton dropDownMain">2.5" Width</button>
-                <ul>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(2.5,2.5)">2.5" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(2.5,3)">3" Height</button></li>
+              <li><button class="dropDownMenuButton">2.5" Width</button>
+                <ul class="dropDownSubMenu">
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(2.5,2.5)">2.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(2.5,3)">3" Height</button></li>
                 </ul>
               </li>
-              <li><button class="dropDownMenuButton dropDownMain">3" Width</button>
-                <ul>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(3,1)">1" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(3,1.5)">1.5" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(3,2)">2" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(3,2.5)">2.5" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(3,3)">3" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(3,4)">4" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(3,5)">5" Height</button></li>
+              <li><button class="dropDownMenuButton">3" Width</button>
+                <ul class="dropDownSubMenu">
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(3,1)">1" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(3,1.5)">1.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(3,2)">2" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(3,2.5)">2.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(3,3)">3" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(3,4)">4" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(3,5)">5" Height</button></li>
                 </ul>
               </li>
-              <li><button class="dropDownMenuButton dropDownMain">4" Width</button>
-                <ul>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(4,1.5)">1.5" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(4,2)">2" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(4,3)">3" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(4,4)">4" Height</button></li>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(4,5)">5" Height</button></li>
+              <li><button class="dropDownMenuButton">4" Width</button>
+                <ul class="dropDownSubMenu">
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(4,1.5)">1.5" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(4,2)">2" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(4,3)">3" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(4,4)">4" Height</button></li>
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(4,5)">5" Height</button></li>
                 </ul>
               </li>
-              <li><button class="dropDownMenuButton dropDownMain">6" Width</button>
-                <ul>
-                  <li><button class="dropDownMenuButton dropDownSubMenu" onclick="ductSelect(6,4)">4" Height</button></li>
+              <li><button id="sixInchWidthButton" class="dropDownMenuButton">6" Width</button>
+                <ul class="dropDownSubMenu">
+                  <li><button class="dropDownMenuButton dropDownSubButton" onclick="ductSelect(6,4)">4" Height</button></li>
                 </ul>
               </li>
             </ul>
@@ -406,8 +406,8 @@
       <div class="inputGridWideCenter" id="conductorCountDisplayContainer" style="display: none;">
         <div id="conductorCountHeader"></div>
         <div id="conductorCountTable">
-          <div style="margin-right: -1px;">Wire Gauge</div>
-          <div style="margin-left: -1px;">Total Conductor Count</div>
+          <div style="margin-right: -1px; border-top-left-radius: 5px;">Wire Gauge</div>
+          <div style="margin-left: -1px; border-top-right-radius: 5px;">Total Conductor Count</div>
         </div>
 
 
@@ -423,7 +423,7 @@
           <summary>Calculation Methodology</summary>
           <div id="maxConductorCountMethodologyContainer" class="methodologyContainer">
             <p>Unlike the first calculator (Minimum Duct Size for Given Conductors), the method for calculating the wire count takes into account packing. Square packing is being utilized to determine total wire count. The rationale is two fold, firstly due to real-world factors, it is near impossible for a wire duct to be run and routed perfectly such that an ideal amount of conductors would fit. The second reason is that it makes the math, like, <i>super</i> easy.</p>
-            <p>The method utilizes the values found in <b><i>NFPA79 (2013) Table 8 (Conductor Properties)</i></b>. The table is as such:</p><br>
+            <p>The method utilizes the values found in <b><i>NFPA79 (2015) Table 8 (Conductor Properties)</i></b>. The table is as such:</p><br>
             <div class="conductorsPropertiesTableWrapper">
               <table class="conductorPropertiesTable">
                 <tr>
@@ -508,11 +508,11 @@
                 </tr>
               </table>
             </div><br>
-            <p>With the wire diameter for a given gauge determined, the calculation is as follows. First, we must calculate total amount of usable area. To do that, we must refer to <b><i>NFPA79 (2013) Section 13.5.2</i></b> (Author's Notes: I only have access to NFPA 79-2015. As such, I can't confirm the percent fill will be located in 13.5.2).
+            <p>With the wire diameter for a given gauge determined, the calculation is as follows. First, we must calculate total amount of usable area. To do that, we must refer to <b><i>NFPA79 (2015) Section 13.5.2</i></b> (Author's Notes: I only have access to NFPA 79-2015. As such, I can't confirm the percent fill will be located in 13.5.2).
             This section states the following:</p><br>
-            <blockquote><b>Percentage Fills of Raceways.</b> The combined cross-sectional area of all conductors and cables shall not exceed 50 percent of the interior cross-sectional area of the raceway. The fill provisions shall be based on the actual dimensions of the conductors or cables used.<br><p style="text-align: right;"><i>-NFPA 79 (2013), Section 13.5.2</i></p></blockquote><br>
+            <blockquote><b>Percentage Fills of Raceways.</b> The combined cross-sectional area of all conductors and cables shall not exceed 50 percent of the interior cross-sectional area of the raceway. The fill provisions shall be based on the actual dimensions of the conductors or cables used.<br><p style="text-align: right;"><i>-NFPA 79 (2015), Section 13.5.2</i></p></blockquote><br>
             <p>Located within the <b>Annex A Explanatory Material</b> there is an additional statement about section 13.5.2 that says the following:</p><br>
-            <blockquote>It should be recognized that, for certain conditions, a larger size raceway or a less raceway fill should be considered.<br><p style="text-align: right;"><i>-NFPA 79 (2013), A13.5.2</i></p></blockquote><br>
+            <blockquote>It should be recognized that, for certain conditions, a larger size raceway or a less raceway fill should be considered.<br><p style="text-align: right;"><i>-NFPA 79 (2015), A13.5.2</i></p></blockquote><br>
             <p>Additionally, the manufacturer of wire duct Panduit™ has a section explaining this, as well as describing the 'Usable Duct Area'. Within, they state that accounting for the thickness of the material, 90% of the outside dimensions are actually usable. When combining with the requirements of NFPA79 13.5.2, that's 50% of 90% of outside dimensions, or for what is being utilized for this calculation, total of 45% of the outside height dimension. This will be defined as the <b>Usable Height</b>. Additionally, we should scale the width by a factor of 90%. This will remove wall thickness and determine how many conductors can fit along the width. This shall be defined as the <b>Usable Width</b>.</p><br>
             <p>It should be noted that due to the nature of wires and routing the wires, a truly 50% fill wiring duct may appear to be completely filled due to the additional airspace created by non-uniformly sized and laid cables, interlacing, and other packing factors.</p><br>
             <p>Once the duct size has been determined, we can simply find the height and scale it by a factor of 0.45.</p>

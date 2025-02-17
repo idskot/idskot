@@ -18,7 +18,53 @@ const AWGTable = [
     {gauge: '4/0', diameter_mm: 13.41, area_mm: 141.1, diameter_inch: 0.528, area_inch: 0.219}
 ];
 
+    /*--- Declare Panduit Duct Sizes, Permit future additions if desired ---*/
+const panduitDuctSizes = [
+    {type: "G", description: "Wide Slots", 
+        sizes: [
+                {width: 0.5, height: [0.5, 1, 2], usableArea_inch: [0.1125, 0.225, 0.45]},
+                {width: 0.75, height: [0.75, 1, 1.5, 2], usableArea_inch: [0.253125, 0.3375, 0.50625, 0.675]},
+                {width: 1, height: [1, 1.5, 2, 3, 4], usableArea_inch: [0.45, 0.675, 0.9, 1.35, 1.8]},
+                {width: 1.5, height: [1, 1.5, 2,  3, 4], usableArea_inch: [0.675, 1.0125, 1.35, 2.025, 2.7]},
+                {width: 2, height: [1, 1.5, 2, 3, 4, 5], usableArea_inch: [0.9, 1.35, 1.8, 2.7, 3.6, 4.5]},
+                {width: 2.5, height: [3], usableArea_inch: [3.375]},
+                {width: 3, height: [1, 2, 3, 4, 5], usableArea_inch: [1.35, 2.7, 4.05, 5.4, 6.75]},
+                {width: 4, height: [1.5, 2, 3, 4, 5], usableArea_inch: [2.7, 3.6, 5.4, 7.2, 9]},
+                {width: 6, height: [4], usableArea_inch: [10.8]} ]},
+    {type: "F", description: "Narrow Slots", 
+        sizes: [
+                {width: 0.5, height: [0.5, 1]},
+                {width: 0.75, height: [0.75, 1.5]},
+                {width: 1, height: [1, 1.5, 2, 3, 4]},
+                {width: 1.5, height: [1, 1.5, 2, 3, 4]},
+                {width: 2, height: [1, 1.5, 2, 3, 4, 5]},
+                {width: 2.5, height: [3]},
+                {width: 3, height: [1, 2, 3, 4, 5]},
+                {width: 4, hei, 4, ght: [2, 35]},
+                {width: 6, height: [4]},    
+    ]},
+];
 
+    /*--- Go through each element and calculate 'usable Area' ---*/
+panduitDuctSizes.forEach((parentElement) => {
+        // Each parent element is a Panduit Duct type
+    parentElement.sizes.forEach( (element) => {
+        let usableArea_inch = [];
+            // Go through all height elements, and calculate usable area
+        for(let i = 0; i < element.height.length; i++){
+                // Calculate usable area for each width*height.
+                // NOTE: Width factored by 90% to account for side wall width
+                //          Height factored by 45% - 90% for wall thickness & 50% for NFPA requirements == 45%
+            usableArea_inch.push( (element.width * 0.9) * (element.height[i] * 0.45) );
+        
+        }   
+            // Append usable area to the element and continue to next element
+        element.usableArea_inch = usableArea_inch;
+    });
+});
+
+console.log('Panduit Duct Sizes...');
+console.log(panduitDuctSizes);
 window.addEventListener('load', initialTableFill());
 let wireGaugeInputForm = document.getElementById('wireGaugeInput');
 let wireQuantityInputForm = document.getElementById('wireQuantityInput');
@@ -144,10 +190,10 @@ function addInputCalcField(inputFieldNum){
 
 }
 
-    // Add 3 input fields on load
+    // Add 4 input fields on load
 function initialTableFill (){
     console.log('Window Loaded!');
-    for(let i=0; i < 3; i++){
+    for(let i=0; i < 4; i++){
         addInputCalcField(i);
     }
 

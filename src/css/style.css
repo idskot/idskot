@@ -45,29 +45,6 @@ input[type='number'], input[type='text']{
   display: inline-block;
 }
 
-.inputHeader {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--idleColor);
-  text-align: center;
-  font-weight: bold;
-  padding: 0.5em 0;
-}
-
-.inputGridWrapper, .inputGridWrapperHeader {
-	display: none;
-	width: 100%;
-	grid-template-columns: 1fr repeat(4, 5fr) 1fr;
-	padding: 1em;
-}
-
-
-.inputGridWrapper > div, .inputGridWrapperHeader > div, #wireDuctDisplayWrapper > div{
-	/*border: 1px dashed black; */
-	padding: 0.06em;
-}
-
 .inputGridWideMarginL {
   grid-column: 1/3;
 }
@@ -84,6 +61,34 @@ input[type='number'], input[type='text']{
   grid-column: 2/6;
   margin-block-end: 5%;
 }
+
+
+.inputHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--idleColor);
+  text-align: center;
+  font-weight: bold;
+  padding: 0.5em 0;
+}
+
+.inputHeader:nth-child(even) {
+  border-top-left-radius: 5px;
+}
+
+
+.inputHeader:nth-child(odd) {
+  border-top-right-radius: 5px;
+}
+
+.inputGridWrapper, .inputGridWrapperHeader {
+	display: none;
+	width: 100%;
+	grid-template-columns: 1fr repeat(4, 5fr) 1fr;
+	padding: 1em;
+}
+
 
 .inputGridWrapper > .inputGrid, .inputGridWrapperHeader > .inputGrid {
 	text-align: right;
@@ -131,14 +136,21 @@ input[type='number'], input[type='text']{
 }
 
 .conductorGaugeInputElement > select, .conductorQuantityInputElement > input  {
-  width: 50%;
-  min-width: 100px;
+  width: 100px;
   height: 1.5em;
   text-align: center;
 }
 
 .conductorGaugeInputElement:nth-child(even), .conductorQuantityInputElement:nth-child(even) {
   background-color: var(--idleColor);
+}
+
+.conductorGaugeInputElement:last-child {
+  border-bottom-left-radius: 5px;
+}
+
+.conductorQuantityInputElement:last-child {
+  border-bottom-right-radius: 5px;
 }
 
 #ductCalcButtonsContainer > input[type='submit'], #ductCalcButtonsContainer > input[type='reset'] {
@@ -346,7 +358,7 @@ summary::-webkit-details-marker {
 }
 
 .methodologyDetail .methodologyContainer {
-  border-radius: 5px;
+  border-radius: 0px 0px 5px 5px;
   border: 1px solid var(--idleColor);
   background-color: var(--idleColorLite);
   padding-top: 0.5em;
@@ -355,9 +367,10 @@ summary::-webkit-details-marker {
 .methodologyContainer blockquote {
   width: 75%;
   margin-left: 12.5%;
-  padding: 0.5em 1em;
+  padding: 0.75em 2em 0.1em 2em;
   background-color: var(--idleColor);
   font-style: italic;
+  border-radius: 5px;
 }
 
 .methodologyContainer p {
@@ -376,21 +389,47 @@ summary::-webkit-details-marker {
   width: 30%;
 }
 
+.conductorPropertiesTable tr:first-child th:first-child{
+  border-top-left-radius: 5px;
+}
+
+.conductorPropertiesTable tr:first-child th:last-child{
+  border-top-right-radius: 5px;
+}
+
+
 .conductorPropertiesTable tr:nth-child(odd){
   background-color: var(--idleColor);
 }
 
-.conductorPropertiesTable, .conductorPropertiesTable th, .conductorPropertiesTable td {
+.conductorPropertiesTable{
   border: 1px solid black;
   border-collapse: collapse;
+  border-radius: 5px;
+  border-style: hidden;
+  box-shadow: 0 0 0 1px black;
   padding: 0.1em 0.25em;
 }
+
+.conductorPropertiesTable th, .conductorPropertiesTable td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 0.25em;
+}
+
+.conductorPropertiesTable tr:first-child th{
+  padding: 0.5em;
+}
+
+
+/*** Duct Size Selection Drop Down Styles ***/
 
 .ductSizeDropDown {
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
+  padding: 1em 0.5em 1em 0.5em;
 }
 
 ul {
@@ -402,6 +441,7 @@ ul {
 .dropDownMenu li {
   position: relative;
   float: left;
+  min-width: 350px;
 }
 
 .dropDownMenu li > ul {
@@ -424,19 +464,48 @@ ul {
   border: 1px solid #fff;
   cursor: pointer;
   width: 100%;
+  min-height: 3em;
 }
 
-.dropDownMenu .active {
-  background-color: var(--hoverColor);
+  /* Make the main button look nice */
+#wireDuctSizingHeaderButton {
+  border-radius: 5px;
 }
 
-.dropDownMenu button:hover {
-  background-color: var(--hoverColor);
+  /* When list item is hovered, remove bottom radius to allow the flow to work */
+.dropDownMenu li:hover #wireDuctSizingHeaderButton, .dropDownSubMenu > li:first-of-type .dropDownSubButton {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
+
+#sixInchWidthButton, .dropDownSubMenu > li:last-of-type .dropDownSubButton  {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+li:nth-of-type(even) > .dropDownMenuButton , .dropDownSubMenu > li:nth-of-type(even) .dropDownSubButton {
+  background-color: var(--idleColorLite);
+}
+
+  /* Color for element when hovering */
+.dropDownMenu .active, .dropDownMenuButton:hover {
+  background-color: var(--hoverColor) !important;
+  font-weight: bold;
+}
+  
+#wireDuctSizingHeaderButton {
+  background-color: var(--idleColor);
+}
+
+.dropDownMenu li:hover #wireDuctSizingHeaderButton {
+  background-color: var(--activeColor);
+}
+
 .dropDownMenu li:hover > ul {
   left:0;
   top:100%;
 }
+
 .dropDownMenu li li:hover > ul {
   left:0;
   transform:translateX(100%);
@@ -446,13 +515,11 @@ ul {
 .dropDownMenu ul li {
   float: none;
 }
-.dropDownMenu li:hover > button {
-  background: (--idleColor);
-}
+
+
 #dropDownMenu ul li {
   border-top: none;
 }
-
 
 #conductorCountDisplayContainer{
   grid-column: 3/5;
@@ -488,6 +555,8 @@ ul {
   border: 2px solid black;
   font-weight: bold;
   background-color: var(--idleColor);
+  padding-top: 0.5em;
+  padding-bottom: 0.25em;
 }
 
 #conductorCountTable > div:nth-child(n + 3) {
@@ -497,10 +566,20 @@ ul {
   margin-top: -1px;
 }
 
-#conductorCountTable >div:nth-child(odd) {
+#conductorCountTable > div:nth-child(odd) {
   margin-left: -1px
 }
 
 #conductorCountTable > div:nth-child(4n-2),   #conductorCountTable > div:nth-child(4n-3) {
   background-color: var(--idleColor);
+}
+
+  /* Bottom-most Row, Left Column */
+#conductorCountTable > div:nth-last-child(2) {
+  border-bottom-left-radius: 5px;
+}
+
+  /* Bottom-most Row, Right Column */
+#conductorCountTable > div:last-child {
+  border-bottom-right-radius: 5px;
 }
