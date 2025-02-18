@@ -40,7 +40,7 @@ const panduitDuctSizes = [
                 {width: 2, height: [1, 1.5, 2, 3, 4, 5]},
                 {width: 2.5, height: [3]},
                 {width: 3, height: [1, 2, 3, 4, 5]},
-                {width: 4, hei, 4, ght: [2, 35]},
+                {width: 4, height: [2, 4, 3,5]},
                 {width: 6, height: [4]},    
     ]},
 ];
