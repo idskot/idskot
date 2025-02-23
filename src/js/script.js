@@ -404,5 +404,11 @@ function ductSelect(inputWidth, inputHeight){
     }
 
     document.getElementById('conductorCountDisplayContainer').style.display = '';
-    document.getElementById('conductorCountHeader').textContent = 'Displaying Values for: ' + inputWidth +'"w x ' + inputHeight +'"h Wire Duct';
-}
+    document.getElementById('conductorCountHeader').textContent = 'Displaying Values for: ' + inputWidth +'"W x ' + inputHeight +'"H Wire Duct';
+
+        // Hide the drop down menu
+    document.getElementById('wireDuctDropDown').classList.remove('dropDownActiveTop');
+        // Go through all drop down sub content and remove visibility.
+    const dropDownSubElements = document.getElementsByClassName('dropDownSubContent');
+    Array.prototype.forEach.call(dropDownSubElements, (element) => { element.classList.remove('dropDownActiveSide')});
+    }

@@ -63,7 +63,7 @@ input[type='number'], input[type='text']{
 }
 
 
-.inputHeader {
+.inputHeaderL, .inputHeaderR, .inputHeaderC {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -73,12 +73,12 @@ input[type='number'], input[type='text']{
   padding: 0.5em 0;
 }
 
-.inputHeader:nth-child(even) {
+.inputHeaderL, .inputHeaderC {
   border-top-left-radius: 5px;
 }
 
 
-.inputHeader:nth-child(odd) {
+.inputHeaderR, .inputHeaderC {
   border-top-right-radius: 5px;
 }
 
@@ -424,101 +424,134 @@ summary::-webkit-details-marker {
 
 /*** Duct Size Selection Drop Down Styles ***/
 
-.ductSizeDropDown {
+.dropDownMenu{
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
   padding: 1em 0.5em 1em 0.5em;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.dropDownMenu li {
-  position: relative;
-  float: left;
-  min-width: 350px;
-}
-
-.dropDownMenu li > ul {
-  position: absolute;
-  left:-999em;
-  width:100%;
-  top:0;
-  transition:top .25s ease;
-}
-
-.dropDownMenu ul ul {
-  transition:transform .25s ease, opacity .25s ease;
-  transform:translateX(0);
-  opacity:0;
-}
-
-.dropDownMenu .dropDownMenuButton {
-  background-color: var(--idleColor);
-  padding: 5px 10px 5px 10px;
-  border: 1px solid #fff;
   cursor: pointer;
-  width: 100%;
-  min-height: 3em;
 }
 
-  /* Make the main button look nice */
-#wireDuctSizingHeaderButton {
+.dropDownTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 30%;
+  height: 1.5em;
+  border: 2px solid black;
   border-radius: 5px;
+  background-color: var(--activeColor);
+  font-weight: bold;
+  font-size: 16px;
+  padding: 1em 0.5em 1em 0.5em;
 }
 
-  /* When list item is hovered, remove bottom radius to allow the flow to work */
-.dropDownMenu li:hover #wireDuctSizingHeaderButton, .dropDownSubMenu > li:first-of-type .dropDownSubButton {
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
+  /* Primary Drop Down Contents */
+.dropDownContent {
+  transition: max-height 0.15s ease-out, max-width 0.15 ease-out;
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  background-color: #f1f1f1;
+  max-height: 0px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  overflow: hidden;
+  width: 100%;
+  top: 10.25em;
+  cursor: pointer;
 }
 
-#sixInchWidthButton, .dropDownSubMenu > li:last-of-type .dropDownSubButton  {
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+/* Secondary Drop Down Container */
+.dropDownSubMenu{
+  position: relative;
+  min-width: 100%;
 }
 
-li:nth-of-type(even) > .dropDownMenuButton , .dropDownSubMenu > li:nth-of-type(even) .dropDownSubButton {
+  /* Sub Menu Drop Down Contents */
+.dropDownSubContent {
+  transition: max-height 0.15s ease-out, max-width 0.15 ease-out;
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  min-width: 0px;
+  max-width: 0px;
+  height: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  top: 0px;
+  left: 100%;
+  margin-left: -1px;
+  max-width: 0;
+  overflow: clip;
+}
+
+  /* Primary Drop Down Display & Transition */
+.dropDownActiveTop {
+  transition: visibility 0.25s, opacity 0.25s ease, max-height 0.75s ease-in;
+  visibility: visible;
+  opacity: 1;
+  max-height: 600px;
+  max-width: 25%;
+}
+
+  /* When Secondary Drop Down is Displayed, allow Overflow of Primary Container */
+.dropDownActiveTop:has(.dropDownActiveSide) {
+  overflow: visible;
+}
+
+  /* Display & Transition for Secondary Drop Down Menus */
+.dropDownActiveSide {
+  transition: 0.75s ease ;
+  visibility: visible;
+  opacity: 1;
+  min-width: 100%;
+  max-width: 100%;
+}
+
+  /* Drop Down Menu Button Display */
+.dropDownContent button {
+  height: 2.0em;
+  width: 100%;
+  min-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 1px solid black;
+  color: black;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.dropDownContent .dropDownSubMenu:not(:first-child), .dropDownSubContent button:not(:first-child) {
+  margin-top: -1px;
+}
+
+  /* Alternating Drop Down Menu Button Colors */
+.dropDownSubMenu:nth-of-type(odd) button, .dropDownSubMenu:nth-of-type(odd) .dropDownSubContent button:nth-child(even), .dropDownSubMenu:nth-of-type(even) .dropDownSubContent button:nth-child(odd) {
+  background-color: var(--idleColor);
+}
+
+  /* Alternating Drop Down Menu Button Colors */
+.dropDownSubMenu:nth-of-type(even) button, .dropDownSubContent button:nth-child(odd), .dropDownSubMenu:nth-of-type(odd) .dropDownSubContent button:nth-child(odd), .dropDownSubMenu:nth-of-type(even) .dropDownSubContent button:nth-child(even) {
   background-color: var(--idleColorLite);
 }
 
-  /* Color for element when hovering */
-.dropDownMenu .active, .dropDownMenuButton:hover {
+  /* On Hover, Highlight Button */
+button:hover, .buttonActive > button {
   background-color: var(--hoverColor) !important;
   font-weight: bold;
 }
-  
-#wireDuctSizingHeaderButton {
-  background-color: var(--idleColor);
+
+.dropDownSubMenu:first-of-type > button, .dropDownSubContent button:first-of-type {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
-.dropDownMenu li:hover #wireDuctSizingHeaderButton {
-  background-color: var(--activeColor);
-}
-
-.dropDownMenu li:hover > ul {
-  left:0;
-  top:100%;
-}
-
-.dropDownMenu li li:hover > ul {
-  left:0;
-  transform:translateX(100%);
-  top:0;
-  opacity:1;
-}
-.dropDownMenu ul li {
-  float: none;
-}
-
-
-#dropDownMenu ul li {
-  border-top: none;
+.dropDownSubMenu:last-of-type > button, .dropDownSubContent button:last-of-type {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 #conductorCountDisplayContainer{
