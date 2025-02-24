@@ -9,6 +9,7 @@ var dropDownSubMenu = document.getElementsByClassName('dropDownSubMenu');
   // Add an event for mouse enter over DIV, then display first level of Drop Down  
 dropDownTitle.addEventListener('mouseenter', function() {
   dropDownContent.classList.add('dropDownActiveTop')
+  document.getElementById('wireDuctBubble').classList.add('bubbleHide');
 });
 
   // Add an event for mouse enter over DIV, then display first level of Drop Down  
@@ -21,8 +22,9 @@ dropDownContent.addEventListener('mouseleave', function() {
 Array.prototype.forEach.call(dropDownSelectButton, (dropDownButtonElement) => {
 
     // Add an event for mouse enter over Container DIV, then display second level of Drop Down  
-    dropDownButtonElement.addEventListener('mouseenter', function () {
+    dropDownButtonElement.addEventListener('mouseenter', function () {      
       dropDownButtonElement.parentNode.classList.add('buttonActive');
+      document.getElementById('wireDuctBubble').classList.add('bubbleHide');
     });
  
       // Add an event for mouse leaving out of Container DIV, implement 100ms delay to ease navigation  

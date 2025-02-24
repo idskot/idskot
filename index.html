@@ -316,9 +316,10 @@
 
       <!-- Row 2: Duct Selection -->
       <div class="inputGridWideMarginL"></div>
-      <div id="dropDownMenu" class="inputGridMediumCenter dropDownMenu">
-        <span id="wireDuctSizingHeaderButton" class="dropDownTitle"><b>Wire Duct<br>Sizing Selection</b></span>
-        <div id="wireDuctDropDown" class="dropDownContent">
+      <div class="inputGridMediumCenter">
+        <div id="dropDownMenu" class="dropDownMenu">
+          <span id="wireDuctSizingHeaderButton" class="dropDownTitle"><b>Wire Duct<br>Sizing Selection</b></span>
+          <div id="wireDuctDropDown" class="dropDownContent">
             <div id="05inWidthContainer" class="dropDownSubMenu">
               <button class="dropDownSelectButton">0.5" Width</button>
               <div class="dropDownSubContent">
@@ -403,9 +404,14 @@
                 <button class="dropDownMenuButton" onclick="ductSelect(6,4)">6" Width x 4" Height</button>
               </div>
             </div>                    
+          </div>
         </div>
-    </div>
-      <div class="inputGridWideMarginR"></div>
+        <div id="wireDuctBubble" class="bubbleRight">
+          Hover Over To Pick Wire Duct Size.
+        </div>
+      </div>
+      <div class="inputGridWideMarginR">
+      </div>
 
       <!-- Row 3: Display Table -->
       <div class="inputGridWideMarginL"></div>

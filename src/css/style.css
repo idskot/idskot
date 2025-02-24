@@ -461,6 +461,7 @@ summary::-webkit-details-marker {
   width: 100%;
   top: 10.25em;
   cursor: pointer;
+  z-index: 999;
 }
 
 /* Secondary Drop Down Container */
@@ -554,6 +555,55 @@ button:hover, .buttonActive > button {
   border-bottom-right-radius: 5px;
 }
 
+/* Bubble Style */
+.bubbleRight {
+	position: relative;
+	background: var(--activeColor);
+	border: 7px solid black;
+  min-height: 2em;
+  max-width:250px;
+  padding:10px;
+  margin:0 auto;
+  font: bold 16px Arial, Helvetica, sans-serif;
+  font-size:14px;
+  font-weight: bold;
+  border-radius:7px;    
+  bottom: 50%;
+  left: 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.bubbleRight:after, .bubbleRight:before {
+	right: 100%;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.bubbleRight:after {
+	border-color: rgba(255, 255, 204, 0);
+	border-right-color: var(--activeColor);
+	border-width: 7px;
+	margin-top: -7px;
+}
+.bubbleRight:before {
+	border-color: rgba(255, 204, 0, 0);
+	border-right-color: black;
+	border-width: 15px;
+	margin-top: -15px;
+}
+
+.bubbleHide {
+  transition: 1s ease;
+  visibility: 0;
+  opacity: 0;
+}
+
 #conductorCountDisplayContainer{
   grid-column: 3/5;
 }
@@ -573,6 +623,7 @@ button:hover, .buttonActive > button {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(15, 1fr);
+  z-index: 1;
 }
 
 #conductorCountTable > div {
